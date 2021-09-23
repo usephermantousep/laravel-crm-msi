@@ -17,7 +17,10 @@ class PlanVisitController extends Controller
     {
         try {
 
-            $planVisit = PlanVisit::with(['outlet.user.cluster','outlet.cluster'])->where('user_id',Auth::user()->id)->whereDate('tanggal_visit',date('Y-m-d'))->get();
+            $planVisit = PlanVisit::with(['outlet.user.cluster','outlet.cluster'])
+            ->where('user_id',Auth::user()->id)
+            ->whereDate('tanggal_visit',date('Y-m-d'))
+            ->get();
 
             return ResponseFormatter::success(
                 $planVisit,'ok');
@@ -35,7 +38,12 @@ class PlanVisitController extends Controller
                 'bulan' => ['required','string'],
                 'tahun' => ['required','string'],
             ]);
-            $plan = PlanVisit::with(['outlet.user.cluster','outlet.cluster'])->whereYear('tanggal_visit','=',$request->tahun)->whereMonth('tanggal_visit','=',$request->bulan)->where('user_id',Auth::user()->id)->orderBy('tanggal_visit')->get();
+            $plan = PlanVisit::with(['outlet.user.cluster','outlet.cluster'])
+            ->whereYear('tanggal_visit','=',$request->tahun)
+            ->whereMonth('tanggal_visit','=',$request->bulan)
+            ->where('user_id',Auth::user()->id)
+            ->orderBy('tanggal_visit')
+            ->get();
             return ResponseFormatter::success($plan,'berhasil');
         } catch (Exception $e) {
             return ResponseFormatter::error(null,$e);
@@ -53,7 +61,10 @@ class PlanVisitController extends Controller
 
             $idOutlet = Outlet::where('nama_outlet',$request->nama_outlet)->first();
             ##cek apakah sudah ada data dengan user, outlet dan tanggal yang dikirim
-            $cekData = PlanVisit::whereDate('tanggal_visit',Carbon::parse($request->tanggal_visit))->where('user_id',Auth::user()->id)->where('outlet_id',$idOutlet->id)->first();
+            $cekData = PlanVisit::whereDate('tanggal_visit',Carbon::parse($request->tanggal_visit))
+            ->where('user_id',Auth::user()->id)
+            ->where('outlet_id',$idOutlet->id)
+            ->first();
             if($cekData)
             {
                 return ResponseFormatter::error($cekData,'data sebelumnya sudah ada');

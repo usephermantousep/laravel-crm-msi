@@ -13,7 +13,11 @@ class OutletController extends Controller
 {
     public function fetch(Request $request){
         try {
-            $outlet = Outlet::with(['cluster','user.cluster'])->where('cluster_id',Auth::user()->cluster->id)->orderBy('nama_outlet')->get();
+            $outlet = Outlet::with(['cluster','user.cluster'])
+            ->where('cluster_id',Auth::user()
+            ->cluster->id)->orderBy('nama_outlet')
+            ->get();
+
             return ResponseFormatter::success(
                 $outlet,
                 'fetch outlet berhasil'
@@ -57,7 +61,9 @@ class OutletController extends Controller
     public function singleOutlet(Request $request,$nama)
     {
         try {
-            $outlet = Outlet::with(['user.cluster','cluster'])->where('nama_outlet',$nama)->get();
+            $outlet = Outlet::with(['user.cluster','cluster'])
+            ->where('nama_outlet',$nama)
+            ->get();
         return ResponseFormatter::success($outlet,'berhasil');
         } catch (Exception $err) {
             return ResponseFormatter::error(null,'ada kesalahan');

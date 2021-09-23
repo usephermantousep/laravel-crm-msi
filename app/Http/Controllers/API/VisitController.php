@@ -18,7 +18,11 @@ class VisitController extends Controller
     {
         try {
 
-            $visit = Visit::with(['outlet.user.cluster','outlet.cluster'])->where('user_id',Auth::user()->id)->whereDate('tanggal_visit',date('Y-m-d'))->latest()->get();
+            $visit = Visit::with(['outlet.user.cluster','outlet.cluster'])
+            ->where('user_id',Auth::user()->id)
+            ->whereDate('tanggal_visit',date('Y-m-d'))
+            ->latest()
+            ->get();
 
             return ResponseFormatter::success($visit,'fetch visit succes');
         } catch (Exception $err) {

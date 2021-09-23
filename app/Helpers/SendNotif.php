@@ -6,15 +6,15 @@ use Illuminate\Http\Request;
 
 class SendNotif{
 
-    public function sendMessage(Request $requets)
+    public static function sendMessage($content,$id)
     {
         $content = array(
-            "en" => $requets->content,
+            "en" => $content,
         );
 
         $fields = array(
             'app_id' => "787d6428-2b70-463d-a858-eec955e1a922",
-            'include_player_ids' => explode(',',$requets->id),
+            'include_player_ids' => explode(',',$id),
             'large_icon' => '@drawable/msilogo',
             'small_icon' => '@drawable/msilogo',
             'contents' => $content

@@ -6,8 +6,12 @@ use Exception;
 use App\Models\Noo;
 use Illuminate\Http\Request;
 use App\Helpers\ResponseFormatter;
+use App\Helpers\SendNotif;
 use App\Http\Controllers\Controller;
 use App\Models\Cluster;
+use App\Models\Outlet;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
@@ -16,7 +20,27 @@ class NooController extends Controller
     public function fetch(Request $request)
     {
         try {
-            $noos = Noo::with(['user.cluster','cluster'])->where('user_id',Auth::user()->id)->get();
+            $noos = Noo::with(['user.cluster','cluster'])
+            ->where('user_id',Auth::user()->id)
+            ->get();
+
+            return ResponseFormatter::success(
+                $noos,
+                'fetch noo success',
+            );
+
+
+        } catch (Exception $err) {
+            return ResponseFormatter::error([
+                'message' => $err,
+            ],'something wrong',500);
+        }
+    }
+
+    public function all(Request $request)
+    {
+        try {
+            $noos = Noo::with(['user.cluster','cluster'])->get();
 
             return ResponseFormatter::success(
                 $noos,
@@ -92,7 +116,18 @@ class NooController extends Controller
                 $request->file('video')->move(storage_path('app/public/'),'noo-'.time().$name);
             }
             Noo::create($data);
-            return ResponseFormatter::success(null,'berhasil');
+
+            $ids = User::whereIn('roles',['AR','DSM'])->get();
+
+            $idNotif = array();
+            foreach ($ids as $id)
+            {
+            $idNotif[] = $id->id_notif;
+            }
+            $notifId = implode(',',$idNotif);
+
+            SendNotif::sendMessage('Noo baru '.$request->nama_outlet.' ditambahkan oleh '.Auth::user()->nama_lengkap, $notifId);
+            return ResponseFormatter::success(null,'berhasil menambahkan NOO '.$request->nama_outlet);
         } catch (Exception $e) {
             error_log($e);
             return ResponseFormatter::error($e,'gagal');
@@ -100,4 +135,85 @@ class NooController extends Controller
 
     }
 
+    public function confirm(Request $request)
+    {
+        try {
+            if(Auth::user()->roles == 'AR'){
+                $request->validate([
+                    'id' => ['required'],
+                    'status' => ['required'],
+                    'limit' => ['required'],
+                ]);
+
+                $noo = Noo::find($request->id);
+                $noo->status = $request->status;
+                $noo->limit = (int) $request->limit;
+                $noo->confirmed_by = Auth::user()->nama_lengkap;
+                $noo->confirmed_at = Carbon::now();
+
+                $idDsm = User::where('roles','DSM')->first();
+
+                SendNotif::sendMessage('Noo '.$noo->nama_outlet.' sudah di konfirmasi oleh '.Auth::user()->nama_lengkap.PHP_EOL. 'limit outlet Rp ' .number_format($noo->limit,0,',','.')  , $noo->user->id_notif);
+                SendNotif::sendMessage('Noo '.$noo->nama_outlet.' sudah di konfirmasi oleh '.Auth::user()->nama_lengkap.PHP_EOL. 'limit outlet Rp ' .number_format($noo->limit,0,',','.'). ' dan butuh persetujuan oleh DSM', $idDsm->id_notif);
+
+            }else{
+                $request->validate([
+                    'id' => ['required'],
+                    'status' => ['required'],
+                ]);
+
+                $noo = Noo::find($request->id);
+                $noo->status = $request->status;
+                $noo->approved_by = Auth::user()->nama_lengkap;
+                $noo->approved_at = Carbon::now();
+                SendNotif::sendMessage('Noo '.$noo->nama_outlet.' sudah di setujui oleh '.Auth::user()->nama_lengkap, $noo->user->id_notif);
+                $data = [
+                    'user_id' => $noo->user_id,
+                    'nama_outlet' => $noo->nama_outlet,
+                    'alamat_outlet' => $noo->alamat_outlet,
+                    'nama_pemilik_outlet'=> $noo->nama_pemilik_outlet,
+                    'nomer_tlp_outlet' => $noo->nomer_tlp_outlet,
+                    'region' => $noo->region,
+                    'cluster_id' => $noo->cluster_id,
+                    'radius' => 50,
+                    'latlong' => $noo->latlong,
+                    'status_outlet' => 'MAINTAIN',
+                ];
+                Outlet::create($data);
+            }
+            $noo->update();
+
+            return ResponseFormatter::success($noo,'berhasil update');
+
+        } catch (Exception $e) {
+            return ResponseFormatter::error($e,'gagal');
+
+        }
+
+    }
+
+    public function reject(Request $request)
+    {
+        try {
+            $request->validate([
+                'id' => ['required'],
+                'status' => ['required'],
+                'alasan' => ['required'],
+            ]);
+
+            $noo = Noo::find($request->id);
+            $noo->status = $request->status;
+            $noo->keterangan = $request->alasan;
+            $noo->rejected_by = Auth::user()->nama_lengkap;
+            $noo->rejected_at = Carbon::now();
+
+            $noo->update();
+
+            SendNotif::sendMessage('Noo '.$noo->nama_outlet.' ditolak oleh '.Auth::user()->nama_lengkap.PHP_EOL. 'Alasan : '. $request->alasan  , $noo->user->id_notif);
+
+            return ResponseFormatter::success($noo,'berhasil update');
+        } catch (Exception $e) {
+            return ResponseFormatter::error($e,'gagal');
+        }
+    }
 }

@@ -26,6 +26,28 @@ class Noo extends Model
         return $this->belongsTo(Cluster::class);
     }
 
+    public function getConfirmedAtAttribute($value)
+    {
+        if($value){
+        return Carbon::parse($value)->getPreciseTimestamp(3);
+        }
+    }
+
+    public function getRejectedAtAttribute($value)
+    {
+        if($value){
+            return Carbon::parse($value)->getPreciseTimestamp(3);
+        }
+
+    }
+
+    public function getApprovedAtAttribute($value)
+    {
+        if($value){
+            return Carbon::parse($value)->getPreciseTimestamp(3);
+        }
+    }
+
     public function getCreatedAtAttribute($value)
     {
         return Carbon::parse($value)->getPreciseTimestamp(3);

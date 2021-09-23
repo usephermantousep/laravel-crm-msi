@@ -6,6 +6,7 @@ use App\Http\Controllers\API\OutletController;
 use App\Http\Controllers\API\PlanVisitController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\VisitController;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -24,6 +25,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->group(function(){
 //USER
 Route::get('user',[UserController::class,'fetch']);
+Route::post('logout',[UserController::class,'logout']);
 
 //OUTLET
 Route::get('outlet', [OutletController::class,'fetch']);
@@ -42,11 +44,20 @@ Route::get('planvisit/filter',[PlanVisitController::class,'bymonth']);
 Route::delete('planvisit',[PlanVisitController::class,'delete']);
 
 //NOO
-Route::get('noo',[NooController::class,'fetch']);
 Route::post('noo',[NooController::class,'submit']);
+Route::get('noo/all',[NooController::class,'all']);
+Route::get('noo',[NooController::class,'fetch']);
+
+Route::post('noo/confirm',[NooController::class,'confirm']);
+Route::post('noo/reject',[NooController::class,'reject']);
 });
 
 Route::post('user/register',[UserController::class,'register']);
 Route::post('user/login',[UserController::class,'login']);
 
 Route::post('notif', [SendNotif::class,'sendMessage']);
+
+
+Route::get('tes', function () {
+    phpinfo();
+});
