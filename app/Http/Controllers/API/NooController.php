@@ -21,7 +21,7 @@ class NooController extends Controller
     {
         try {
             $noos = Noo::with(['user.cluster','cluster'])
-            ->where('user_id',Auth::user()->id)
+            ->where('cluster_id',Auth::user()->cluster_id)
             ->get();
 
             return ResponseFormatter::success(
@@ -138,49 +138,33 @@ class NooController extends Controller
     public function confirm(Request $request)
     {
         try {
-            if(Auth::user()->roles == 'AR'){
-                $request->validate([
-                    'id' => ['required'],
-                    'status' => ['required'],
-                    'limit' => ['required'],
-                ]);
+            
+            $request->validate([
+                'id' => ['required'],
+                'status' => ['required'],
+                'limit' => ['required'],
+            ]);
 
-                $noo = Noo::find($request->id);
-                $noo->status = $request->status;
-                $noo->limit = (int) $request->limit;
-                $noo->confirmed_by = Auth::user()->nama_lengkap;
-                $noo->confirmed_at = Carbon::now();
-
-                $idDsm = User::where('roles','DSM')->first();
-
-                SendNotif::sendMessage('Noo '.$noo->nama_outlet.' sudah di konfirmasi oleh '.Auth::user()->nama_lengkap.PHP_EOL. 'limit outlet Rp ' .number_format($noo->limit,0,',','.')  , $noo->user->id_notif);
-                SendNotif::sendMessage('Noo '.$noo->nama_outlet.' sudah di konfirmasi oleh '.Auth::user()->nama_lengkap.PHP_EOL. 'limit outlet Rp ' .number_format($noo->limit,0,',','.'). ' dan butuh persetujuan oleh DSM', $idDsm->id_notif);
-
-            }else{
-                $request->validate([
-                    'id' => ['required'],
-                    'status' => ['required'],
-                ]);
-
-                $noo = Noo::find($request->id);
-                $noo->status = $request->status;
-                $noo->approved_by = Auth::user()->nama_lengkap;
-                $noo->approved_at = Carbon::now();
-                SendNotif::sendMessage('Noo '.$noo->nama_outlet.' sudah di setujui oleh '.Auth::user()->nama_lengkap, $noo->user->id_notif);
-                $data = [
-                    'user_id' => $noo->user_id,
-                    'nama_outlet' => $noo->nama_outlet,
-                    'alamat_outlet' => $noo->alamat_outlet,
-                    'nama_pemilik_outlet'=> $noo->nama_pemilik_outlet,
-                    'nomer_tlp_outlet' => $noo->nomer_tlp_outlet,
-                    'region' => $noo->region,
-                    'cluster_id' => $noo->cluster_id,
-                    'radius' => 50,
-                    'latlong' => $noo->latlong,
-                    'status_outlet' => 'MAINTAIN',
-                ];
-                Outlet::create($data);
-            }
+            $noo = Noo::find($request->id);
+            $noo->status = $request->status;
+            $noo->limit = $request->limit;
+            $noo->approved_by = Auth::user()->nama_lengkap;
+            $noo->approved_at = Carbon::now();
+            SendNotif::sendMessage('Noo '.$noo->nama_outlet.' sudah di setujui oleh '.Auth::user()->nama_lengkap.PHP_EOL. 'Dengan limit : Rp '.number_format($request->limit,0,',','.'), $noo->user->id_notif);
+            $data = [
+                'user_id' => $noo->user_id,
+                'nama_outlet' => $noo->nama_outlet,
+                'alamat_outlet' => $noo->alamat_outlet,
+                'nama_pemilik_outlet'=> $noo->nama_pemilik_outlet,
+                'nomer_tlp_outlet' => $noo->nomer_tlp_outlet,
+                'region' => $noo->region,
+                'cluster_id' => $noo->cluster_id,
+                'radius' => 50,
+                'latlong' => $noo->latlong,
+                'status_outlet' => 'MAINTAIN',
+            ];
+            Outlet::create($data);
+            
             $noo->update();
 
             return ResponseFormatter::success($noo,'berhasil update');

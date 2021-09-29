@@ -19,7 +19,7 @@ class CreateNoosTable extends Migration
             $table->string('nama_outlet');
             $table->text('alamat_outlet');
             $table->string('nama_pemilik_outlet');
-            $table->string('nomer_tlp_outlet');
+            $table->string('nomer_tlp_outlet')->unique();
             $table->string('nomer_wakil_outlet');
             $table->string('ktp_outlet');
             $table->string('kota');
@@ -41,8 +41,6 @@ class CreateNoosTable extends Migration
             $table->string('latlong');
             $table->bigInteger('limit')->nullable();
             $table->string('status')->default('PENDING');
-            $table->timestamp('confirmed_at')->nullable();
-            $table->string('confirmed_by')->nullable();
             $table->timestamp('rejected_at')->nullable();
             $table->string('rejected_by')->nullable();
             $table->string('approved_by')->nullable();

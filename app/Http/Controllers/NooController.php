@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\noo;
+use App\Models\Noo;
 use Illuminate\Http\Request;
 
 class NooController extends Controller
@@ -14,7 +14,11 @@ class NooController extends Controller
      */
     public function index()
     {
-        //
+        $noos = Noo::latest()->filter()->get();
+        return view('noo.index',[
+            'noos' => $noos,
+            'title' => 'NOO'
+        ]);
     }
 
     /**
@@ -44,9 +48,8 @@ class NooController extends Controller
      * @param  \App\Models\noo  $noo
      * @return \Illuminate\Http\Response
      */
-    public function show(noo $noo)
+    public function show($id)
     {
-        //
     }
 
     /**

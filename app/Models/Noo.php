@@ -16,6 +16,13 @@ class Noo extends Model
         'id'
     ];
 
+    public function scopeFilter($query)
+    {
+        if(request('search')){
+            $query->where('nama_outlet',"like",'%'.request('search').'%');
+        }
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);

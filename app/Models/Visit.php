@@ -18,8 +18,9 @@ class Visit extends Model
 
     public function user()
     {
-        $this->belongsTo(User::class);
+        return $this->belongsTo(User::class);
     }
+
 
     public function outlet()
     {
@@ -48,6 +49,10 @@ class Visit extends Model
 
     public function getCheckOutTimeAttribute($value)
     {
-        return Carbon::parse($value)->getPreciseTimestamp(3);
+        if($value){
+            return Carbon::parse($value)->getPreciseTimestamp(3);
+        }else{
+            return $value;
+        }
     }
 }

@@ -8,6 +8,7 @@ use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\VisitController;
 use App\Models\User;
 use Carbon\Carbon;
+use FFMpeg\FFMpeg;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -58,6 +59,6 @@ Route::post('user/login',[UserController::class,'login']);
 Route::post('notif', [SendNotif::class,'sendMessage']);
 
 
-Route::get('tes', function () {
-    phpinfo();
+Route::get('tes', function (Request $request) {
+    return '';
 });

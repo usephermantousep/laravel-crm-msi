@@ -21,6 +21,13 @@ class User extends Authenticatable
     use TwoFactorAuthenticatable;
     use SoftDeletes;
 
+    public function scopeFilter($query)
+    {
+        if(request('search')){
+            $query->where('nama_lengkap',"like",'%'.request('search').'%');
+        }
+    }
+
     public function outlet()
     {
         return $this->hasMany(Outlet::class);

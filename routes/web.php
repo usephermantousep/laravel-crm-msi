@@ -1,8 +1,13 @@
 <?php
 
-use Illuminate\Foundation\Application;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\NooController;
+use App\Http\Controllers\OutletController;
+use App\Http\Controllers\PlanVisitController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\VisitController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,16 +19,43 @@ use Inertia\Inertia;
 | contains the "web" middleware group. Now create something great!
 |
 */
+##HANDLE JETSTREAM BLOCK
+Route::get('/', [LoginController::class,'index']);
+Route::get('/login', [LoginController::class,'index'])->name('login');
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
+##LOGIN
+Route::get('/masuk',[LoginController::class,'index'])->name('masuk');
+Route::post('/masuk',[LoginController::class,'login']);
+
+##EXPORT
+Route::get('/outlet/export',[OutletController::class,'export']);
+
+##MIDDLEWARE
+Route::middleware(['auth', 'isAdmin'])->group(function () {
+
+##DASHBOARD
+Route::get('/dashboard',[DashboardController::class,'index']);
+Route::get('/dashboard/logout',[DashboardController::class,'logout']);
+
+##NOO
+Route::get('/noo',[NooController::class,'index']);
+Route::get('/noo/{id}',[NooController::class,'show']);
+
+##OUTLET
+Route::get('/outlet',[OutletController::class,'index']);
+Route::get('/outlet/{id}',[OutletController::class,'show']);
+
+##USER
+Route::get('/user',[UserController::class,'index']);
+
+##VISIT
+Route::get('/visit',[VisitController::class,'index']);
+
+##PLANVISIT
+Route::get('/planvisit',[PlanVisitController::class,'index']);
+
 });
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->name('dashboard');
+
+
+
