@@ -16,7 +16,6 @@ class Clusters extends Migration
         Schema::create('clusters', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('region');
             $table->timestamps();
         }); //
     }

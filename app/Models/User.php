@@ -8,7 +8,6 @@ use Laravel\Jetstream\HasProfilePhoto;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Fortify\TwoFactorAuthenticatable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -52,6 +51,26 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Cluster::class);
     }
+    
+    public function region()
+    {
+        return $this->belongsTo(Region::class);
+    }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    public function divisi()
+    {
+        return $this->belongsTo(Division::class);
+    }
+
+    public function badanusaha()
+    {
+        return $this->belongsTo(BadanUsaha::class);
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -72,6 +91,8 @@ class User extends Authenticatable
         'remember_token',
         'two_factor_recovery_codes',
         'two_factor_secret',
+        "created_at",
+        "updated_at",
     ];
 
     /**

@@ -13,6 +13,10 @@ class Cluster extends Model
         'id'
     ];
 
+    protected $hidden = [
+        "created_at", "updated_at"
+    ];
+
     public function user()
     {
         return $this->hasMany(User::class);

@@ -17,87 +17,99 @@ class ClusterSeeder extends Seeder
         Cluster::insert([
             [
             'name' => 'CW1',
-            'region' => 'WJS',
             ],
             [
             'name' => 'CW2',
-            'region' => 'WJS',
             ],
             [
             'name' => 'CW3',
-            'region' => 'WJS',
             ],
             [
             'name' => 'CW4',
-            'region' => 'WJS',
             ],
             [
             'name' => 'CW5',
-            'region' => 'WJS',
             ],
             [
             'name' => 'CW6',
-            'region' => 'WJS',
             ],
             [
             'name' => 'CW7',
-            'region' => 'WJU',
             ],
             [
             'name' => 'CW8',
-            'region' => 'WJU',
             ],
             [
             'name' => 'CW9',
-            'region' => 'WJU',
             ],
             [
             'name' => 'CW10',
-            'region' => 'WJU',
             ],
             [
             'name' => 'CJ1',
-            'region' => 'CJU',
             ],
             [
             'name' => 'CJ2',
-            'region' => 'CJU',
             ],
             [
             'name' => 'CJ3',
-            'region' => 'CJU',
             ],
             [
             'name' => 'CJ4',
-            'region' => 'CJU',
             ],
             [
             'name' => 'CJ5',
-            'region' => 'CJU',
             ],
             [
             'name' => 'CJ6',
-            'region' => 'CJS',
             ],
             [
             'name' => 'CJ7',
-            'region' => 'CJS',
             ],
             [
             'name' => 'CJ8',
-            'region' => 'CJS',
             ],
             [
             'name' => 'CJ9',
-            'region' => 'CJS',
             ],
             [
             'name' => 'CJ10',
-            'region' => 'CJS',
             ],
             [
-            'name' => 'JABO',
-            'region' => 'JABO',
+            'name' => 'EJ1',
+            ],
+            [
+            'name' => 'EJ2',
+            ],
+            [
+            'name' => 'EJ3',
+            ],
+            [
+            'name' => 'EJ4',
+            ],
+            [
+            'name' => 'EJ5',
+            ],
+            [
+            'name' => 'EJ6',
+            ],
+            [
+            'name' => 'EJ7',
+            ],
+            [
+            'name' => 'EJ8',
+            ],
+            [
+            'name' => 'EJ9',
+            ],
+            [
+            'name' => 'EJ10',
+            ],
+            [
+            'name' => 'JBO',
+            ],
+            [
+            'name' => '-',
             ],
         ]);
     }

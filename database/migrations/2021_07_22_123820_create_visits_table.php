@@ -15,7 +15,7 @@ class CreateVisitsTable extends Migration
     {
         Schema::create('visits', function (Blueprint $table) {
             $table->id();
-            $table->timestamp('tanggal_visit')->nullable();
+            $table->timestamp('tanggal_visit');
             $table->foreignId('user_id');
             $table->foreignId('outlet_id');
             $table->string('tipe_visit');
@@ -24,10 +24,10 @@ class CreateVisitsTable extends Migration
             $table->timestamp('check_in_time')->nullable();
             $table->timestamp('check_out_time')->nullable();
             $table->text('laporan_visit')->nullable();
+            $table->enum('transaksi',['YES','NO'])->nullable();
             $table->integer('durasi_visit')->nullable();
             $table->text('picture_visit_in')->nullable();
             $table->text('picture_visit_out')->nullable();
-
             $table->softDeletes();
             $table->timestamps();
         });

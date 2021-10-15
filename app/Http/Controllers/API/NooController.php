@@ -11,7 +11,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Cluster;
 use App\Models\Outlet;
 use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
@@ -20,9 +19,38 @@ class NooController extends Controller
     public function fetch(Request $request)
     {
         try {
-            $noos = Noo::with(['user.cluster','cluster'])
-            ->where('cluster_id',Auth::user()->cluster_id)
-            ->get();
+            $user = Auth::user();
+            $badanusahaId = $user->badanusaha_id;
+            $divisiId = $user->divisi_id;
+            $regionId = $user->region_id;
+            $clusterId = $user->cluster_id;
+            $roleId = $user->role_id;
+
+            $query = Noo::with(['badanusaha','cluster','region','divisi'])
+                    ->where('badanusaha_id',$badanusahaId)
+                    ->where('divisi_id',$divisiId);
+            
+            switch ($roleId) {
+                case 1:
+                    $noos = $query
+                    ->where('cluster_id',$clusterId)
+                    ->latest()
+                    ->get();
+                    break;
+
+                case 2:
+                    $noos = $query
+                    ->where('region_id',$regionId)
+                    ->latest()
+                    ->get();
+                    break;
+                    
+                default:
+                    $noos = Noo::with(['badanusaha','cluster','region','divisi'])->latest()->get();
+                    break;
+            }
+
+            
 
             return ResponseFormatter::success(
                 $noos,
@@ -40,7 +68,7 @@ class NooController extends Controller
     public function all(Request $request)
     {
         try {
-            $noos = Noo::with(['user.cluster','cluster'])->get();
+            $noos = Noo::with(['badanusaha','cluster','region','divisi'])->get();
 
             return ResponseFormatter::success(
                 $noos,
@@ -58,10 +86,10 @@ class NooController extends Controller
     public function submit(Request $request)
     {
         try {
-            $cluster = Cluster::where('name',$request->cluster)->first();
-
+            $user = Auth::user();
             $data = [
-                'user_id' => Auth::user()->id,
+                'badanusaha_id' => $user->badanusaha_id,
+                'divisi_id' => $user->divisi_id,
                 'nama_outlet' => $request->nama_outlet,
                 'alamat_outlet' => $request->alamat_outlet,
                 'nama_pemilik_outlet' => $request->nama_pemilik,
@@ -69,8 +97,8 @@ class NooController extends Controller
                 'nomer_wakil_outlet' => $request->nomer_perwakilan,
                 'ktp_outlet' => $request->ktpnpwp,
                 'kota' => $request->kota,
-                'region' => $cluster->region,
-                'cluster_id' => $cluster->id,
+                'region_id' => $user->region_id,
+                'cluster_id' => $user->cluster_id,
                 'oppo' => $request->oppo,
                 'vivo' => $request->vivo,
                 'samsung' => $request->samsung,
@@ -78,9 +106,16 @@ class NooController extends Controller
                 'realme' => $request->realme,
                 'fl' => $request->fl,
                 'latlong' => $request->latlong,
+                'created_by' => $user->nama_lengkap
             ];
 
-            for($i=0;$i<=5;$i++){
+            if ($user->role_id == 2) {
+                $cluster = Cluster::where('name',$request->cluster)->first();
+                $data['cluster_id'] = $cluster->id;
+            }
+            
+
+            for($i=0;$i<=6;$i++){
                 $namaFoto = $request->file('photo'.$i)->getClientOriginalName();
                 if(Str::contains($namaFoto ,'fotodepan'))
                 {
@@ -102,6 +137,10 @@ class NooController extends Controller
                 {
                     $data['poto_etalase'] = $namaFoto;
                 }
+                else if(Str::contains($namaFoto ,'fotoktp'))
+                {
+                    $data['poto_ktp'] = $namaFoto;
+                }
                 else
                 {
                     $data['poto_shop_sign'] = $namaFoto;
@@ -117,7 +156,7 @@ class NooController extends Controller
             }
             Noo::create($data);
 
-            $ids = User::whereIn('roles',['AR','DSM'])->get();
+            $ids = User::whereIn('role_id',[3.4])->get();
 
             $idNotif = array();
             foreach ($ids as $id)
@@ -143,33 +182,51 @@ class NooController extends Controller
                 'id' => ['required'],
                 'status' => ['required'],
                 'limit' => ['required'],
+                'kode_outlet' => ['required'],
             ]);
 
             $noo = Noo::find($request->id);
             $noo->status = $request->status;
             $noo->limit = $request->limit;
+            $noo->kode_outlet = $request->kode_outlet;
             $noo->approved_by = Auth::user()->nama_lengkap;
-            $noo->approved_at = Carbon::now();
-            SendNotif::sendMessage('Noo '.$noo->nama_outlet.' sudah di setujui oleh '.Auth::user()->nama_lengkap.PHP_EOL. 'Dengan limit : Rp '.number_format($request->limit,0,',','.'), $noo->user->id_notif);
+            $noo->approved_at = now();
+            $noo->update();
+            SendNotif::sendMessage(
+                'Noo '.$noo->nama_outlet.' sudah di setujui oleh '.
+                Auth::user()->nama_lengkap.PHP_EOL.
+                'Dengan limit : Rp '.number_format($request->limit,0,',','.'), 
+                User::where('badanusaha_id',$noo->badan_usaha_id)
+                ->where('divisi_id',$noo->divisi_id)
+                ->where('region_id',$noo->region_id)
+                ->where('nama_lengkap',$noo->created_by)->first()->id_notif ?? '-');
             $data = [
-                'user_id' => $noo->user_id,
+                'kode_outlet' => $noo->kode_outlet,
+                'badanusaha_id' => $noo->badanusaha_id,
                 'nama_outlet' => $noo->nama_outlet,
+                'divisi_id' => $noo->divisi_id,
                 'alamat_outlet' => $noo->alamat_outlet,
                 'nama_pemilik_outlet'=> $noo->nama_pemilik_outlet,
                 'nomer_tlp_outlet' => $noo->nomer_tlp_outlet,
-                'region' => $noo->region,
+                'region_id' => $noo->region_id,
                 'cluster_id' => $noo->cluster_id,
-                'radius' => 50,
+                'poto_shop_sign' => $noo->poto_shop_sign,
+                'poto_etalase' => $noo->poto_etalase,
+                'poto_depan' => $noo->poto_depan,
+                'poto_kanan' => $noo->poto_kanan,
+                'poto_kiri' => $noo->poto_kiri,
+                'poto_belakang' => $noo->poto_belakang,
+                'poto_ktp' => $noo->poto_ktp,
+                'radius' => 0,
                 'latlong' => $noo->latlong,
                 'status_outlet' => 'MAINTAIN',
+                'limit' => $noo->limit,
             ];
             Outlet::create($data);
-            
-            $noo->update();
-
             return ResponseFormatter::success($noo,'berhasil update');
 
         } catch (Exception $e) {
+            error_log($e);
             return ResponseFormatter::error($e,'gagal');
 
         }
@@ -189,7 +246,7 @@ class NooController extends Controller
             $noo->status = $request->status;
             $noo->keterangan = $request->alasan;
             $noo->rejected_by = Auth::user()->nama_lengkap;
-            $noo->rejected_at = Carbon::now();
+            $noo->rejected_at = now();
 
             $noo->update();
 

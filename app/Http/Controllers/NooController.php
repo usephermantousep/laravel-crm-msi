@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\NooExport;
 use App\Models\Noo;
-use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class NooController extends Controller
 {
@@ -14,75 +15,16 @@ class NooController extends Controller
      */
     public function index()
     {
-        $noos = Noo::latest()->filter()->get();
+        $noos = Noo::with(['badanusaha','cluster','region','divisi'])->latest()->filter()->get();
         return view('noo.index',[
             'noos' => $noos,
-            'title' => 'NOO'
+            'title' => 'NOO',
+            'active' => 'noo',
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function export()
     {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\noo  $noo
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\noo  $noo
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(noo $noo)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\noo  $noo
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, noo $noo)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\noo  $noo
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(noo $noo)
-    {
-        //
+        return Excel::download(new NooExport,'noo.xlsx');
     }
 }

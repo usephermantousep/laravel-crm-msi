@@ -16,11 +16,21 @@ class PlanVisitController extends Controller
     public function fetch(Request $request)
     {
         try {
-
-            $planVisit = PlanVisit::with(['outlet.user.cluster','outlet.cluster'])
-            ->where('user_id',Auth::user()->id)
-            ->whereDate('tanggal_visit',date('Y-m-d'))
-            ->get();
+            $planVisit = PlanVisit::with(
+                [
+                    'outlet.badanusaha',
+                    'outlet.region',
+                    'outlet.divisi',
+                    'outlet.cluster',
+                    'user.badanusaha',
+                    'user.region',
+                    'user.divisi',
+                    'user.cluster',
+                    'user.role'
+                ])
+                ->where('user_id',Auth::user()->id)
+                ->whereDate('tanggal_visit',date('Y-m-d'))
+                ->get();
 
             return ResponseFormatter::success(
                 $planVisit,'ok');
@@ -38,7 +48,17 @@ class PlanVisitController extends Controller
                 'bulan' => ['required','string'],
                 'tahun' => ['required','string'],
             ]);
-            $plan = PlanVisit::with(['outlet.user.cluster','outlet.cluster'])
+            $plan = PlanVisit::with([
+                'outlet.badanusaha',
+                'outlet.region',
+                'outlet.divisi',
+                'outlet.cluster',
+                'user.badanusaha',
+                'user.region',
+                'user.divisi',
+                'user.cluster',
+                'user.role'
+            ])
             ->whereYear('tanggal_visit','=',$request->tahun)
             ->whereMonth('tanggal_visit','=',$request->bulan)
             ->where('user_id',Auth::user()->id)
@@ -56,10 +76,10 @@ class PlanVisitController extends Controller
         try {
             $request->validate([
                 'tanggal_visit' => ['required','date'],
-                'nama_outlet' => ['required'],
+                'kode_outlet' => ['required'],
             ]);
 
-            $idOutlet = Outlet::where('nama_outlet',$request->nama_outlet)->first();
+            $idOutlet = Outlet::where('kode_outlet',$request->kode_outlet)->first();
             ##cek apakah sudah ada data dengan user, outlet dan tanggal yang dikirim
             $cekData = PlanVisit::whereDate('tanggal_visit',Carbon::parse($request->tanggal_visit))
             ->where('user_id',Auth::user()->id)
@@ -89,10 +109,10 @@ class PlanVisitController extends Controller
             $validation = $request->validate([
                 'bulan' => 'required',
                 'tahun' => 'required',
-                'nama_outlet' => 'required',
+                'kode_outlet' => 'required',
             ]);
 
-            $outletId = Outlet::where('nama_outlet',$request->nama_outlet)->first()->id;
+            $outletId = Outlet::where('kode_outlet',$request->kode_outlet)->first()->id;
 
             if(!$validation)
             {
@@ -115,6 +135,7 @@ class PlanVisitController extends Controller
         }
         catch (Exception $e)
         {
+            error_log($e);
             return ResponseFormatter::error($e,'error',422);
 
         }

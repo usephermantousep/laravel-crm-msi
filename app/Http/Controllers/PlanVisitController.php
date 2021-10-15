@@ -14,10 +14,11 @@ class PlanVisitController extends Controller
      */
     public function index()
     {
-        $planVisits = PlanVisit::orderBy('tanggal_visit','desc')->paginate(10);
+        $planVisits = PlanVisit::orderBy('tanggal_visit','desc')->get();
         return view('planvisit.index',[
             'planVisits' => $planVisits,
-            'title' => 'Plan Visit'
+            'title' => 'Plan Visit',
+            'active' => 'planvisit',
         ]);
     }
 

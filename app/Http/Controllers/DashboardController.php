@@ -30,7 +30,8 @@ class DashboardController extends Controller
             'noo' => $noo,
             'visit' => $visit,
             'planvisit' => $planvisit,
-            'title' => 'DASHBOARD'
+            'title' => 'DASHBOARD',
+            'active' => 'dashboard',
         ]);
     }
 

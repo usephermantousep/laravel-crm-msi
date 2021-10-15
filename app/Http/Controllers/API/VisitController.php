@@ -18,9 +18,18 @@ class VisitController extends Controller
     {
         try {
 
-            $visit = Visit::with(['outlet.user.cluster','outlet.cluster'])
+            $visit = Visit::with([
+                'outlet.badanusaha',
+                'outlet.region',
+                'outlet.divisi',
+                'outlet.cluster',
+                'user.badanusaha',
+                'user.region',
+                'user.divisi',
+                'user.cluster',
+                'user.role'])
             ->where('user_id',Auth::user()->id)
-            ->whereDate('tanggal_visit',date('Y-m-d'))
+            ->whereDate('tanggal_visit',today())
             ->latest()
             ->get();
 
@@ -36,10 +45,10 @@ class VisitController extends Controller
     public function check(Request $request)
     {
         $request->validate([
-            'nama_outlet' => ['required'],
+            'kode_outlet' => ['required'],
         ]);
 
-        $outlet = Outlet::where('nama_outlet',$request->nama_outlet)->first();
+        $outlet = Outlet::where('kode_outlet',$request->kode_outlet)->first();
         $outletId= $outlet->id;
 
         ##cek database terkahir dari tanggal sekarang dan user tersebut
@@ -67,7 +76,7 @@ class VisitController extends Controller
             {
                 // if($lastDataSelectedOutletVisit)
                 // {
-                //     return ResponseFormatter::error(null,'anda sudah check in hari ini di outlet '. $lastDataSelectedOutletVisit->outlet->nama_outlet);
+                //     return ResponseFormatter::error(null,'anda sudah check in hari ini di outlet '. $lastDataSelectedOutletVisit->outlet->kode_outlet);
                 // }
                 // else
                 if($lastDataVisit->durasi_visit)
@@ -78,7 +87,7 @@ class VisitController extends Controller
                      //notif error
                      return ResponseFormatter::error([
                         'message' => 'error'
-                        ],"Belum check out dari outlet ". $lastDataVisit->outlet->nama_outlet,400);
+                        ],"Belum check out dari outlet ". $lastDataVisit->outlet->kode_outlet,400);
                 }
             }
             else
@@ -100,7 +109,7 @@ class VisitController extends Controller
                 //     {
                 //         return ResponseFormatter::error([
                 //                 'data' => 'anda sudah checkout'
-                //                 ],'anda hari ini sudah check out di outlet '.$lastDataSelectedOutletVisit->outlet->nama_outlet,400);
+                //                 ],'anda hari ini sudah check out di outlet '.$lastDataSelectedOutletVisit->outlet->kode_outlet,400);
                 //     }
                 // }
                 ##cek data last visit hari ini bernilai true jika ada
@@ -112,7 +121,7 @@ class VisitController extends Controller
                     {
                         return ResponseFormatter::error([
                                 'message' => 'error'
-                                ],"Belum check out dari outlet ". $lastDataVisit->outlet->nama_outlet,400);
+                                ],"Belum check out dari outlet ". $lastDataVisit->outlet->kode_outlet,400);
                     }
                     else
                     {
@@ -157,11 +166,11 @@ class VisitController extends Controller
             #aturan checkin
             if($checkIn)
             {
-                $outlet = Outlet::where('nama_outlet',$request->nama_outlet)->first();
+                $outlet = Outlet::where('kode_outlet',$request->kode_outlet)->first();
                 $outletId = $outlet->id;
                 #validasi data
                 $request->validate([
-                    'nama_outlet' => ['required'],
+                    'kode_outlet' => ['required'],
                     'picture_visit' => ['required','mimes:jpg,jpeg,png'],
                     'latlong_in' => ['required','string'],
                     'tipe_visit' => ['required'],
@@ -201,6 +210,7 @@ class VisitController extends Controller
                         'latlong_out' => ['required'],
                         'laporan_visit' =>['required'],
                         'picture_visit' => ['required','mimes:jpg,jpeg,png'],
+                        'transaksi' => ['required'],
 
                 ]);
                     $timeStart = new DateTime();
@@ -227,7 +237,8 @@ class VisitController extends Controller
                         'check_out_time' => Carbon::now(),
                         'laporan_visit' => $request->laporan_visit,
                         'durasi_visit' => $durasi,
-                        'picture_visit_out' => $imageName
+                        'picture_visit_out' => $imageName,
+                        'transaksi' => $request->transaksi,
                     ];
                     $lastDataVisit->update($data);
                     return ResponseFormatter::success([

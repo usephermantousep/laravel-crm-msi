@@ -2,9 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\OutletExport;
+use Exception;
+use App\Models\User;
 use App\Models\Outlet;
+use App\Models\Region;
+use App\Models\Cluster;
+use App\Models\Division;
+use App\Models\BadanUsaha;
 use Illuminate\Http\Request;
+use App\Exports\OutletExport;
+use App\Exports\TemplateOutletExport;
+use App\Imports\OutletImport;
 use Maatwebsite\Excel\Facades\Excel;
 
 class OutletController extends Controller
@@ -16,13 +24,15 @@ class OutletController extends Controller
      */
     public function index()
     {
-        
-        $outlets = Outlet::with('cluster','user.cluster');
 
-        
-        return view('outlet.index',[
-            'outlets' => $outlets->filter()->get(),
-            'title' => 'Outlet'
+        $outlets = Outlet::with('badanusaha', 'cluster', 'region', 'divisi');
+        $users = User::all();
+
+        return view('outlet.index', [
+            'outlets' => $outlets->filter()->orderBy('kode_outlet')->paginate(10),
+            'title' => 'Outlet',
+            'users' => $users,
+            'active' => 'outlet',
         ]);
     }
 
@@ -56,9 +66,9 @@ class OutletController extends Controller
     public function show($id)
     {
         $outlet = Outlet::find($id);
-        return view('outlet.show',[
-            'outlet' =>$outlet,
-            
+        return view('outlet.show', [
+            'outlet' => $outlet,
+            'title' => 'Detail'
         ]);
     }
 
@@ -70,6 +80,20 @@ class OutletController extends Controller
      */
     public function edit($id)
     {
+        $outlet = Outlet::findOrFail($id);
+        $badanusahas = BadanUsaha::all();
+        $divisis = Division::all();
+        $regions = Region::all();
+        $clusters = Cluster::all();
+        return view('outlet.edit', [
+            'title' => 'Outlet',
+            'active' => 'outlet',
+            'outlet' => $outlet,
+            'badanusahas' => $badanusahas,
+            'divisis' => $divisis,
+            'regions' => $regions,
+            'clusters' => $clusters,
+        ]);
     }
 
     /**
@@ -81,7 +105,34 @@ class OutletController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+
+        try {
+            $outlet = Outlet::findOrFail($id);
+            $request->validate([
+                'kode_outlet' => ['required', 'string', 'max:255','unique:outlets,kode_outlet,'.$outlet->id],
+                'nama_outlet' => ['required', 'string'],
+                'nama_pemilik_outlet' => ['required', 'string'],
+                'alamat_outlet' => ['required', 'string'],
+                'latlong' => ['required'],
+                'radius' => ['required'],
+                'status_outlet' => ['required'],
+                'limit' => ['required'],
+                'badanusaha_id' => ['required'],
+                'divisi_id' => ['required'],
+                'region_id' => ['required'],
+                'cluster_id' => ['required'],
+            ]);
+            $data = $request->all();
+            $data['kode_outlet'] = strtoupper($request->kode_outlet);
+            $data['nama_outlet'] = strtoupper($request->nama_outlet);
+            $data['nama_pemilik_outlet'] = strtoupper($request->nama_pemilik_outlet);
+            $data['alamat_outlet'] = strtoupper($request->alamat_outlet);
+            $outlet->update($data);
+            return redirect('outlet')->with(['success' => 'berhasil edit outlet']);
+        } catch (Exception $e) {
+            error_log($e);
+            return redirect('outlet')->with(['error' => $e->getMessage()]);
+        }
     }
 
     /**
@@ -97,6 +148,21 @@ class OutletController extends Controller
 
     public function export()
     {
-        return Excel::download(new OutletExport,'outlet.xlsx');
+        return Excel::download(new OutletExport, 'outlet.xlsx');
+    }
+
+    public function import(Request $request)
+    {
+        $file = $request->file('file');
+        $namaFile = $file->getClientOriginalName();
+        $file->move('import',$namaFile);
+
+        Excel::import(new OutletImport,public_path('/import/'.$namaFile));
+        return redirect('outlet')->with(['success' => 'berhasil import outlet']);
+    }
+
+    public function template()
+    {
+        return Excel::download(new TemplateOutletExport, 'outlet_template.xlsx');
     }
 }

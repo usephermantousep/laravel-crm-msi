@@ -14,11 +14,16 @@ class DatabaseSeeder extends Seeder
     {
 
         $this->call([
-            OutletSeeder::class,
+            // OutletSeeder::class,
             // PlanVisitSeeder::class,
-            // NooSeeder::class,
+            NooSeeder::class,
             // VisitSeeder::class,
             ClusterSeeder::class,
+            RegionSeeder::class,
+            RoleSeeder::class,
+            UserSeeder::class,
+            DivisionSeeder::class,
+            BadanUsahaSeeder::class,
         ]);
     }
 }

@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->group(function(){
+Route::middleware(['auth:sanctum','logku'])->group(function(){
 //USER
 Route::get('user',[UserController::class,'fetch']);
 Route::post('logout',[UserController::class,'logout']);
@@ -31,12 +31,14 @@ Route::post('logout',[UserController::class,'logout']);
 //OUTLET
 Route::get('outlet', [OutletController::class,'fetch']);
 Route::get('outlet/{nama}', [OutletController::class,'singleOutlet']);
+Route::post('outlet',[OutletController::class,'updatefoto']);
 
 
 //VISIT
 Route::get('visit',[VisitController::class,'fetch']);
 Route::get('visit/check',[VisitController::class,'check']);
 Route::post('visit',[VisitController::class,'submit']);
+
 
 //PLANVISIT
 Route::get('planvisit',[PlanVisitController::class,'fetch']);

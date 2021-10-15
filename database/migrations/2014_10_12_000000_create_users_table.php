@@ -17,9 +17,11 @@ class CreateUsersTable extends Migration
             $table->id();
             $table->string('username')->unique();
             $table->string('nama_lengkap');
-            $table->string('region');
+            $table->foreignId('badanusaha_id');
+            $table->foreignId('divisi_id');
+            $table->foreignId('region_id');
             $table->foreignId('cluster_id');
-            $table->string('roles')->default('SALES');
+            $table->foreignId('role_id');
             $table->string('password');
             $table->string('id_notif')->nullable();
             $table->rememberToken();

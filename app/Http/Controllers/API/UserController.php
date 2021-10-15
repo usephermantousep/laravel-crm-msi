@@ -22,8 +22,8 @@ class UserController extends Controller
 
 
     public function fetch(Request $request){
-        $user = User::with('cluster')->where('id',Auth::user()->id)->get();
-        return ResponseFormatter::success($user,'Data profile user berhasil diambil');
+        $user = User::with(['cluster','region','role','divisi','badanusaha'])->where('id',Auth::user()->id)->first();
+        return ResponseFormatter::success([ 'user' => $user, 'message' => 'Data profile user berhasil diambil']);
     }
 
     public function login(Request $request){
@@ -46,7 +46,7 @@ class UserController extends Controller
                 ],'Gagal login, cek kembali username dan password anda', 500);
             }
 
-            $user = User::with('cluster')->where('username', $request->username)->first();
+            $user = User::with(['region','cluster','role','divisi','badanusaha'])->where('username', $request->username)->first();
             if ( !Hash::check($request->password, $user->password, [])) {
                 throw new Exception('Invalid Credentials');
             }

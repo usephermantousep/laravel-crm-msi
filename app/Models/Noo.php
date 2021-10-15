@@ -23,14 +23,24 @@ class Noo extends Model
         }
     }
 
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
     public function cluster()
     {
         return $this->belongsTo(Cluster::class);
+    }
+
+    public function region()
+    {
+        return $this->belongsTo(Region::class);
+    }
+
+    public function badanusaha()
+    {
+        return $this->belongsTo(BadanUsaha::class);
+    }
+
+    public function divisi()
+    {
+        return $this->belongsTo(Division::class);
     }
 
     public function getConfirmedAtAttribute($value)
