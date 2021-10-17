@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\UserExport;
+use App\Exports\UserTempateExport;
+use App\Imports\UserImport;
 use Exception;
 use App\Models\Role;
 use App\Models\User;
@@ -10,6 +13,7 @@ use App\Models\Cluster;
 use App\Models\Division;
 use App\Models\BadanUsaha;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
 {
@@ -156,5 +160,25 @@ class UserController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function export()
+    {
+        return Excel::download(new UserExport,'user.xlsx');
+    }
+
+    public function import(Request $request)
+    {
+        $file = $request->file('file');
+        $namaFile = $file->getClientOriginalName();
+        $file->move('import',$namaFile);
+
+        Excel::import(new UserImport,public_path('/import/'.$namaFile));
+        return redirect('user')->with(['success' => 'berhasil import user']);
+    }
+
+    public function template()
+    {
+        return Excel::download(new UserTempateExport,'user_template.xlsx');
     }
 }

@@ -9,7 +9,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header bg-dark">
-                                <h3 class="card-title">User</h3>
+                                <h3 class="card-title">Plan Visit</h3>
                                 <div class="card-tools">
                                     <div class="input-group input-group-sm" style="width: 500px;">
                                         <form action="/planvisit" class="d-inline-flex">

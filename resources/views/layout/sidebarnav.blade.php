@@ -50,6 +50,47 @@
                          <p>Plan Visit</p>
                      </a>
                  </li>
+                 <li class="nav-item">
+                     <a href="#" class="nav-link {{ $active === 'setting' ? 'active' : '' }}">
+                         <i class="nav-icon fas fa-cogs"></i>
+                         <p>
+                             Settings
+                             <i class="right fas fa-angle-left"></i>
+                         </p>
+                     </a>
+                     <ul class="nav nav-treeview">
+                         <li class="nav-item">
+                             <a href="/setting/role" class="nav-link">
+                                 <i class="fas fa-user-cog nav-icon"></i>
+                                 <p>Role</p>
+                             </a>
+                         </li>
+                         <li class="nav-item">
+                             <a href="/setting/badanusaha" class="nav-link">
+                                 <i class="fas fa-building nav-icon"></i>
+                                 <p>Badan Usaha</p>
+                             </a>
+                         </li>
+                         <li class="nav-item">
+                             <a href="/setting/divisi" class="nav-link">
+                                 <i class="fas fa-briefcase nav-icon"></i>
+                                 <p>Divisi</p>
+                             </a>
+                         </li>
+                         <li class="nav-item">
+                             <a href="/setting/region" class="nav-link">
+                                 <i class="fas fa-map-signs nav-icon"></i>
+                                 <p>Region</p>
+                             </a>
+                         </li>
+                         <li class="nav-item">
+                             <a href="/setting/cluster" class="nav-link">
+                                 <i class="fas fa-map-pin nav-icon"></i>
+                                 <p>Cluster</p>
+                             </a>
+                         </li>
+                     </ul>
+                 </li>
              </ul>
          </nav>
          <!-- /.sidebar-menu -->

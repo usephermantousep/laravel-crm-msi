@@ -2,59 +2,49 @@
 
 namespace App\Imports;
 
-use App\Models\BadanUsaha;
+use App\Models\Role;
+use App\Models\User;
+use App\Models\Region;
 use App\Models\Cluster;
 use App\Models\Division;
-use App\Models\Outlet;
-use App\Models\Region;
+use App\Models\BadanUsaha;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class OutletImport implements ToModel,WithHeadingRow
+class UserImport implements ToModel, WithHeadingRow
 {
     /**
      * @param array $row
      *
      * @return \Illuminate\Database\Eloquent\Model|null
      */
-
-
     public function model(array $row)
     {
-        $outlet = new Outlet();
-        $outlet = $outlet->where('kode_outlet', $row['kode_outlet']);
-        if ($outlet->first())
+        $user = new User();
+        $user = $user->where('username', strtolower($row['username']));
+        if ($user->first())
         {
-            $outlet->update([
+            $user->update([
+                'nama_lengkap' => strtoupper($row['nama_lengkap']),
+                'username' => strtolower($row['username']),
+                'role_id' => Role::where('name', preg_replace('/\s+/', '', $row['role']))->first()->id,
                 'badanusaha_id' => BadanUsaha::where('name', preg_replace('/\s+/', '', $row['badan_usaha']))->first()->id,
                 'divisi_id' => Division::where('name', preg_replace('/\s+/', '', $row['divisi']))->first()->id,
                 'region_id' => Region::where('name', preg_replace('/\s+/', '', $row['region']))->first()->id,
                 'cluster_id' => Cluster::where('name', preg_replace('/\s+/', '', $row['cluster']))->first()->id,
-                'kode_outlet' => strtoupper($row['kode_outlet']),
-                'nama_outlet' => strtoupper($row['nama_outlet']),
-                'alamat_outlet' => strtoupper($row['alamat_outlet']),
-                'distric' => strtoupper($row['distric']),
-                'status_outlet' => strtoupper($row['status']),
-                'radius' => $row['radius'] ?? 0,
-                'limit' => $row['limit'] ?? 0,
-                'latlong' => $row['latlong'],
             ]);
         }
         else
         {
-            return new Outlet([
+            return new User([
+                'nama_lengkap' => strtoupper($row['nama_lengkap']),
+                'username' => strtolower($row['username']),
+                'role_id' => Role::where('name', preg_replace('/\s+/', '', $row['role']))->first()->id,
                 'badanusaha_id' => BadanUsaha::where('name', preg_replace('/\s+/', '', $row['badan_usaha']))->first()->id,
                 'divisi_id' => Division::where('name', preg_replace('/\s+/', '', $row['divisi']))->first()->id,
                 'region_id' => Region::where('name', preg_replace('/\s+/', '', $row['region']))->first()->id,
                 'cluster_id' => Cluster::where('name', preg_replace('/\s+/', '', $row['cluster']))->first()->id,
-                'kode_outlet' => strtoupper($row['kode_outlet']),
-                'nama_outlet' => strtoupper($row['nama_outlet']),
-                'alamat_outlet' => strtoupper($row['alamat_outlet']),
-                'distric' => strtoupper($row['distric']),
-                'status_outlet' => strtoupper($row['status']),
-                'radius' => $row['radius'] ?? 0,
-                'limit' => $row['limit'] ?? 0,
-                'latlong' => $row['latlong'],
+                'password' => bcrypt($row['password']),
             ]);
         }
         

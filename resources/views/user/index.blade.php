@@ -11,8 +11,20 @@
                             <div class="card-header bg-dark">
                                 <div class="row d-inline-flex">
                                     <h3 class="card-title">User</h3>
-                                    <button type="button" data-toggle="modal" data-target="#addUser"
-                                        class="badge bg-success mx-3 elevation-0">Add</button>
+                                    <a href="#">
+                                        <button type="button" data-toggle="modal" data-target="#addUser"
+                                            class="badge bg-success mx-3 elevation-0">Add</button>
+                                    </a>
+                                    <a href="/user/export">
+                                        <button class="badge bg-primary mx-3 elevation-0">EXPORT
+                                            ALL</button>
+                                    </a>
+                                    <a href="#"><button class="badge bg-success mx-3 elevation-0" data-toggle="modal"
+                                            data-target="#imporUser">IMPORT</button>
+                                    </a>
+                                    <a href="/user/export/template">
+                                        <button class="badge bg-warning mx-3 elevation-0">TEMPLATE IMPORT</button>
+                                    </a>
                                 </div>
                                 <div class="card-tools">
                                     <div class="input-group input-group-sm" style="width: 150px;">
@@ -164,6 +176,30 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                         <button type="submit" class="btn btn-primary">Add</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <!-- Modal -->
+    <form action="/user/import" method="POST" enctype="multipart/form-data">
+        @csrf
+        <div class="modal fade" id="imporUser" tabindex="-1" aria-labelledby="imporUserLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="imporUserLabel">Import User</h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="col-12 mt-3">
+                            <label for="formFile" class="form-label">Pilih File</label>
+                            <input class="form-control" type="file" id="formFile" name="file">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Import</button>
                     </div>
                 </div>
             </div>

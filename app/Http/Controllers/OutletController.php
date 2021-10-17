@@ -111,9 +111,7 @@ class OutletController extends Controller
             $request->validate([
                 'kode_outlet' => ['required', 'string', 'max:255','unique:outlets,kode_outlet,'.$outlet->id],
                 'nama_outlet' => ['required', 'string'],
-                'nama_pemilik_outlet' => ['required', 'string'],
                 'alamat_outlet' => ['required', 'string'],
-                'latlong' => ['required'],
                 'radius' => ['required'],
                 'status_outlet' => ['required'],
                 'limit' => ['required'],

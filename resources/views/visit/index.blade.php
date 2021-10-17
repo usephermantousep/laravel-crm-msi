@@ -114,11 +114,11 @@
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="tanggal1">Dari</label>
-                            <input class="form-control" type="date" id="tanggal1" name="tanggal1" placeholder="Tanggal">
+                            <input class="form-control" type="date" id="tanggal1" name="tanggal1" placeholder="Tanggal" required>
                         </div>
                         <div class="form-group">
                             <label for="tanggal2">Sampai</label>
-                            <input class="form-control" type="date" id="tanggal2" name="tanggal2" placeholder="Tanggal">
+                            <input class="form-control" type="date" id="tanggal2" name="tanggal2" placeholder="Tanggal" required>
                         </div>
                     </div>
 
