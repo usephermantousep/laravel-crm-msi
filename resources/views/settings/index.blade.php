@@ -61,6 +61,23 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Name</th>
+                                        @switch($title)
+                                            @case('Divisi')
+                                                <th>Badan Usaha</th>
+                                            @break
+                                            @case('Region')
+                                                <th>Badan Usaha</th>
+                                                <th>Divisi</th>
+                                            @break
+                                            @case('Cluster')
+                                                <th>Badan Usaha</th>
+                                                <th>Divisi</th>
+                                                <th>Region</th>
+                                            @break
+
+                                            @default
+
+                                        @endswitch
                                         <th>Edit</th>
                                     </tr>
                                 </thead>
@@ -99,6 +116,7 @@
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
                                                     <td>{{ $divisi->name }}</td>
+                                                    <td>{{ $divisi->badanusaha->name }}</td>
                                                     <td>
                                                         <a href="/setting/divisi/{{ $divisi->id }}"
                                                             class="badge bg-warning"><span><i
@@ -113,6 +131,8 @@
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
                                                     <td>{{ $region->name }}</td>
+                                                    <td>{{ $region->badanusaha->name }}</td>
+                                                    <td>{{ $region->divisi->name }}</td>
                                                     <td>
                                                         <a href="/setting/region/{{ $region->id }}"
                                                             class="badge bg-warning"><span><i
@@ -127,6 +147,9 @@
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
                                                     <td>{{ $cluster->name }}</td>
+                                                    <td>{{ $cluster->badanusaha->name }}</td>
+                                                    <td>{{ $cluster->divisi->name }}</td>
+                                                    <td>{{ $cluster->region->name }}</td>
                                                     <td>
                                                         <a href="/setting/cluster/{{ $cluster->id }}"
                                                             class="badge bg-warning"><span><i class="fas fa-edit"></i></span></a>
@@ -221,6 +244,14 @@
                             <label for="name" class="form-label">Nama Divisi</label>
                             <input type="text" class="form-control" id="name" name="name" required>
                         </div>
+                        <div class="mb-3 col-lg-12">
+                            <label for="badanusaha_id" class="form-label">Badan Usaha</label>
+                            <select class="custom-select" id="badanusaha_id" name="badanusaha_id" required>
+                                @foreach ($badanusahas as $badanusaha)
+                                    <option value="{{ $badanusaha->id }}">{{ $badanusaha->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -249,6 +280,22 @@
                         <div class="mb-3 col-lg-12">
                             <label for="name" class="form-label">Nama Region</label>
                             <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        <div class="mb-3 col-lg-12">
+                            <label for="badanusaha_id" class="form-label">Badan Usaha</label>
+                            <select class="custom-select" id="badanusaha_id" name="badanusaha_id" required>
+                                @foreach ($badanusahas as $badanusaha)
+                                    <option value="{{ $badanusaha->id }}">{{ $badanusaha->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="mb-3 col-lg-12">
+                            <label for="divisi_id" class="form-label">Divisi</label>
+                            <select class="custom-select" id="divisi_id" name="divisi_id" required>
+                                @foreach ($divisis as $divisi)
+                                    <option value="{{ $divisi->id }}">{{ $divisi->name }}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -279,6 +326,30 @@
                             <label for="name" class="form-label">Nama Cluster</label>
                             <input type="text" class="form-control" id="name" name="name" required>
                         </div>
+                        <div class="mb-3 col-lg-12">
+                            <label for="badanusaha_id" class="form-label">Badan Usaha</label>
+                            <select class="custom-select" id="badanusaha_id" name="badanusaha_id" required>
+                                @foreach ($badanusahas as $badanusaha)
+                                    <option value="{{ $badanusaha->id }}">{{ $badanusaha->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="mb-3 col-lg-12">
+                            <label for="divisi_id" class="form-label">Divisi</label>
+                            <select class="custom-select" id="divisi_id" name="divisi_id" required>
+                                @foreach ($divisis as $divisi)
+                                    <option value="{{ $divisi->id }}">{{ $divisi->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="mb-3 col-lg-12">
+                            <label for="region_id" class="form-label">Region</label>
+                            <select class="custom-select" name="region_id" id="region_id" required>
+                                @foreach ($regions as $region)
+                                    <option value="{{ $region->id }}">{{ $region->name.'-'.$region->divisi->name.'-'.$region->badanusaha->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -289,4 +360,61 @@
             </div>
         </div>
     </div>
+    {{-- <script>
+        $('#badanusaha_id').change(function() {
+            var badanusaha_id = $(this).val();
+            if (badanusaha_id) {
+                $.ajax({
+                    type: "GET",
+                    
+                    url: "/setting/getdivisi?badanusaha_id=" + badanusaha_id,
+                    dataType: 'JSON',
+                    success: function(res) {
+                        if (res) {
+                            $("#divisi_id").empty();
+                            $("#cluster_id").empty();
+                            $("#divisi_id").append('<option>---Pilih Region---</option>');
+                            $("#cluster_id").append('<option>---Pilih Cluster---</option>');
+                            $.each(res, function(nama, kode) {
+                                $("#divisi_id").append('<option value="' + kode + '">' + nama +
+                                    '</option>');
+                            });
+                        } else {
+                            $("#divisi_id").empty();
+                            $("#cluster_id").empty();
+                        }
+                    }
+                });
+            } else {
+                $("#divisi_id").empty();
+                $("#cluster_id").empty();
+            }
+        });
+
+        $('#region_id').change(function(){
+    var conceptName = $('#aioConceptName').find(":selected").text();
+    var region_id = $(this).val();
+    if(region_id){
+        $.ajax({
+           type:"GET",
+           url:"/setting/getregion?badanusaha_id=" + badanusaha_id+"divisi_id="+,
+           dataType: 'JSON',
+           success:function(res){         
+               console.log(res);      
+            if(res){
+                $("#cluster_id").empty();
+                $("#cluster_id").append('<option>---Pilih Cluster---</option>');
+                $.each(res,function(nama,kode){
+                    $("#cluster_id").append('<option value="'+kode+'">'+nama+'</option>');
+                });
+            }else{
+               $("#cluster_id").empty();
+            }
+           }
+        });
+    }else{
+        $("#cluster_id").empty();
+    }      
+   });
+    </script> --}}
 @endsection

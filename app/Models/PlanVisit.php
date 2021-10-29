@@ -14,6 +14,13 @@ class PlanVisit extends Model
         'id'
     ];
 
+    public function scopeFilter($query)
+    {
+        if(request('search')){
+            $query->where('nama_lengkap',"like",'%'.request('search').'%');
+        }
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);

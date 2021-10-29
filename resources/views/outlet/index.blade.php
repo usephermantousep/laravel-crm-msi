@@ -81,6 +81,7 @@
                                         <th>Foto Kiri</th>
                                         <th>Foto Kanan</th>
                                         <th>Foto Belakang</th>
+                                        <th>Video</th>
                                         <th>Tanggal Registrasi</th>
                                         <th>Edit</th>
                                     </tr>
@@ -97,15 +98,27 @@
                                             <td>{{ $outlet->nama_outlet }}</td>
                                             <td>{{ $outlet->alamat_outlet }}</td>
                                             <td>{{ $outlet->distric }}</td>
-                                            <td>{{ $outlet->nama_pemilik_outlet ?? '-'}}</td>
-                                            <td>{{ $outlet->nomer_tlp_outlet ?? '-'}}</td>
+                                            <td>{{ $outlet->nama_pemilik_outlet ?? '-' }}</td>
+                                            <td>{{ $outlet->nomer_tlp_outlet ?? '-' }}</td>
                                             <td>{{ $outlet->radius }}</td>
                                             <td>Rp {{ number_format($outlet->limit, 0, ',', '.') }}</td>
-                                            <td><a target="_blank"
-                                                    href="http://www.google.com/maps/place/{{ $outlet->latlong }}">Lihat
-                                                    Lokasi</a></td>
+
+                                            @if ($outlet->latlong)
+                                                <td>
+                                                    <a target="_blank"
+                                                        href="http://www.google.com/maps/place/{{ $outlet->latlong }}">Lihat
+                                                        Lokasi
+                                                    </a>
+                                                </td>
+
+                                            @else
+                                                <td>
+                                                    -
+                                                </td>
+                                            @endif
+
                                             <td>{{ $outlet->status_outlet }}</td>
-                                            <td>{{ $users->where('region_id', $outlet->region_id)->where('role_id', 1)->first()->nama_lengkap ?? '-' }}
+                                            <td>{{ $users->where('divisi_id', $outlet->divisi_id)->where('region_id', $outlet->region_id)->where('cluster_id', $outlet->cluster_id)->where('role_id', 3)->first()->tm->nama_lengkap ?? '-' }}
                                             </td>
                                             <td>{{ $users->where('divisi_id', $outlet->divisi_id)->where('region_id', $outlet->region_id)->where('role_id', 2)->first()->nama_lengkap ?? '-' }}
                                             </td>
@@ -151,6 +164,12 @@
                                             @if ($outlet->poto_belakang)
                                                 <td><a href="{{ asset('storage/') . '/' . $outlet->poto_belakang }}">Lihat
                                                         Foto</a></td>
+                                            @else
+                                                <td>-</td>
+                                            @endif
+                                            @if ($outlet->video)
+                                                <td><a href="{{ asset('storage/') . '/' . $outlet->video }}">Lihat
+                                                        Video</a></td>
                                             @else
                                                 <td>-</td>
                                             @endif

@@ -24,7 +24,7 @@ class CreateNoosTable extends Migration
             $table->string('nomer_tlp_outlet');
             $table->string('nomer_wakil_outlet')->nullable();
             $table->string('ktp_outlet');
-            $table->string('kota');
+            $table->string('distric');
             $table->foreignId('region_id');
             $table->foreignId('cluster_id');
             $table->string('poto_shop_sign');
@@ -43,13 +43,16 @@ class CreateNoosTable extends Migration
             $table->string('fl');
             $table->string('latlong');
             $table->bigInteger('limit')->nullable();
-            $table->string('status')->default('PENDING');
+            $table->enum('status',['PENDING','CONFIRMED','APPROVED','REJECTED'])->default('PENDING');
             $table->string('created_by');
             $table->timestamp('rejected_at')->nullable();
             $table->string('rejected_by')->nullable();
+            $table->timestamp('confirmed_at')->nullable();
+            $table->string('confirmed_by')->nullable();
             $table->string('approved_by')->nullable();
             $table->timestamp('approved_at')->nullable();
             $table->string('keterangan')->nullable();
+            $table->foreignId('tm_id');
             $table->softDeletes();
             $table->timestamps();
         });

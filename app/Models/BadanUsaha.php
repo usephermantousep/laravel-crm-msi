@@ -31,4 +31,19 @@ class BadanUsaha extends Model
     {
         return $this->hasMany(Noo::class);
     }
+
+    public function divisi()
+    {
+        return $this->hasMany(Division::class);
+    }
+
+    public function region()
+    {
+        return $this->hasMany(Region::class);
+    }
+
+    public function cluster()
+    {
+        return $this->hasMany(Cluster::class);
+    }
 }

@@ -15,7 +15,7 @@ class OutletExport implements FromCollection,WithMapping,WithHeadings
     */
     public function collection()
     {
-        return Outlet::with(['cluster','region','badanusaha'])->get();
+        return Outlet::with(['cluster','region','badanusaha'])->orderBy('nama_outlet')->get();
     }
 
     public function headings(): array
@@ -44,6 +44,7 @@ class OutletExport implements FromCollection,WithMapping,WithHeadings
 
     public function map($outlet) : array 
     {
+        error_log($outlet->nama_outlet);
         return [
             $outlet->badanusaha->name,
             $outlet->divisi->name,
@@ -59,9 +60,9 @@ class OutletExport implements FromCollection,WithMapping,WithHeadings
             $outlet->latlong,
             $outlet->nama_pemilik_outlet,
             $outlet->nomer_tlp_outlet,
-            User::where('region_id', $outlet->region_id)->where('role_id', 1)->first()->nama_lengkap,
-            User::where('divisi_id', $outlet->divisi_id)->where('region_id', $outlet->region_id)->where('role_id', 2)->first()->nama_lengkap,
-            User::where('divisi_id', $outlet->divisi_id)->where('region_id', $outlet->region_id)->where('cluster_id', $outlet->cluster_id)->where('role_id', 3)->first()->nama_lengkap,
+            User::where('divisi_id', $outlet->divisi_id)->where('region_id', $outlet->region_id)->where('role_id', 2)->first()->tm->nama_lengkap  ?? 'VACANT',
+            User::where('divisi_id', $outlet->divisi_id)->where('region_id', $outlet->region_id)->where('role_id', 2)->first()->nama_lengkap ?? 'VACANT',
+            User::where('divisi_id', $outlet->divisi_id)->where('region_id', $outlet->region_id)->where('cluster_id', $outlet->cluster_id)->where('role_id', 3)->first()->nama_lengkap ?? 'ANEH',
             date('d M Y',$outlet->created_at/1000),
         ];
     }

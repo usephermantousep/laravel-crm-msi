@@ -15,7 +15,9 @@ class Region extends Migration
     {
         Schema::create('regions', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
+            $table->foreignId('badanusaha_id');
+            $table->foreignId('divisi_id');
+            $table->string('name');
             $table->timestamps();
         });
     }

@@ -14,7 +14,7 @@ class UserExport implements FromCollection,WithHeadings,WithMapping
     */
     public function collection()
     {
-        return User::with(['role','region','cluster','divisi','badanusaha'])->get();
+        return User::with(['role','region','cluster','divisi','badanusaha'])->orderBy('nama_lengkap')->get();
     }
 
     public function headings(): array
@@ -27,6 +27,7 @@ class UserExport implements FromCollection,WithHeadings,WithMapping
             'divisi',
             'region',
             'cluster',
+            'tm',
         ];
     }
 
@@ -40,6 +41,7 @@ class UserExport implements FromCollection,WithHeadings,WithMapping
             $user->divisi->name,
             $user->region->name,
             $user->cluster->name,
+            $user->tm->nama_lengkap,
         ];
     }
 }

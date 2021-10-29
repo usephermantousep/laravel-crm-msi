@@ -15,7 +15,10 @@ class Clusters extends Migration
     {
         Schema::create('clusters', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->foreignId('badanusaha_id');
+            $table->foreignId('divisi_id');
+            $table->foreignId('region_id');
+            $table->string('name')->unique();
             $table->timestamps();
         }); //
     }

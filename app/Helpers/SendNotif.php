@@ -4,9 +4,10 @@ namespace App\Helpers;
 
 use Illuminate\Http\Request;
 
-class SendNotif{
+class SendNotif
+{
 
-    public static function sendMessage($content,$id)
+    public static function sendMessage($content, array $id)
     {
         $content = array(
             "en" => $content,
@@ -14,7 +15,7 @@ class SendNotif{
 
         $fields = array(
             'app_id' => "787d6428-2b70-463d-a858-eec955e1a922",
-            'include_player_ids' => explode(',',$id),
+            'include_player_ids' => $id,
             'large_icon' => '@drawable/msilogo',
             'small_icon' => '@drawable/msilogo',
             'contents' => $content
@@ -22,7 +23,7 @@ class SendNotif{
 
         $fields = json_encode($fields);
         // print("\nJSON sent:\n");
-        // print($fields);
+        error_log($fields);
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, "https://onesignal.com/api/v1/notifications");
@@ -36,6 +37,6 @@ class SendNotif{
         curl_exec($ch);
         curl_close($ch);
 
-        // return $response;
+        // error_log($response);
     }
 }

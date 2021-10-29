@@ -31,4 +31,19 @@ class Cluster extends Model
     {
         return $this->hasMany(Noo::class);
     }
+
+    public function badanusaha()
+    {
+        return $this->belongsTo(BadanUsaha::class);
+    }
+
+    public function divisi()
+    {
+        return $this->belongsTo(Division::class);
+    }
+
+    public function region()
+    {
+        return $this->belongsTo(Region::class);
+    }
 }

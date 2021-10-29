@@ -19,17 +19,12 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        $user = count(User::all());
-        $outlet = count(Outlet::all());
-        $noo = count(Noo::all());
-        $visit = count(Visit::all());
-        $planvisit = count(PlanVisit::all());
         return view('dashboard.index',[
-            'user' => $user,
-            'outlet' => $outlet,
-            'noo' => $noo,
-            'visit' => $visit,
-            'planvisit' => $planvisit,
+            'user' => count(User::all()),
+            'outlet' => count(Outlet::all()),
+            'noo' => count(Noo::all()),
+            'visit' => count(Visit::all()),
+            'planvisit' => count(PlanVisit::all()),
             'title' => 'DASHBOARD',
             'active' => 'dashboard',
         ]);

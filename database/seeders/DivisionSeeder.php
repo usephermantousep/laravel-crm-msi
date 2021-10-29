@@ -16,22 +16,24 @@ class DivisionSeeder extends Seeder
     {
         Division::insert([
             [
+                'badanusaha_id' => 1,
                 'name' => 'MSIS',
             ],
             [
+                'badanusaha_id' => 2,
                 'name' => 'ORAIMO',
             ],
             [
+                'badanusaha_id' => 2,
                 'name' => 'TECNO',
             ],
             [
+                'badanusaha_id' => 2,
                 'name' => 'REALME',
             ],
             [
+                'badanusaha_id' => 3,
                 'name' => '-',
-            ],
-            [
-                'name' => 'ALL',
             ],
         ]);
     }

@@ -22,6 +22,7 @@ class CreateUsersTable extends Migration
             $table->foreignId('region_id');
             $table->foreignId('cluster_id');
             $table->foreignId('role_id');
+            $table->foreignId('tm_id');
             $table->string('password');
             $table->string('id_notif')->nullable();
             $table->rememberToken();

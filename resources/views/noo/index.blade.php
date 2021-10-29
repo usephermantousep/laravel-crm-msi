@@ -28,6 +28,16 @@
                                 </div>
                             </div>
                         </div>
+                        @if ($message = Session::get('success'))
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </div>
+                        @endif
+                        @if ($message = Session::get('error'))
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </div>
+                        @endif
                         <!-- /.card-header -->
                         <div class="card-body table-responsive p-0" style="height: 500px;">
                             <table class="table table-head-fixed text-nowrap">
@@ -45,7 +55,7 @@
                                         <th>KTP/NPWP</th>
                                         <th>Nomer</th>
                                         <th>Nomer Wakil</th>
-                                        <th>Kota</th>
+                                        <th>Distric</th>
                                         <th>Region</th>
                                         <th>Cluster</th>
                                         <th>Foto KTP/NPWP</th>
@@ -65,11 +75,14 @@
                                         <th>Lokasi</th>
                                         <th>Limit</th>
                                         <th>Status</th>
+                                        <th>Dikonfirmasi Oleh</th>
+                                        <th>Tangggal Dikonfirmasi</th>
                                         <th>Disetujui Oleh</th>
                                         <th>Tanggal Disetujui</th>
                                         <th>Ditolak Oleh</th>
                                         <th>Tanggal Ditolak</th>
                                         <th>Keterangan</th>
+                                        <th>Edit</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -87,20 +100,28 @@
                                             <td>{{ $noo->ktp_outlet }}</td>
                                             <td>{{ $noo->nomer_tlp_outlet }}</td>
                                             <td>{{ $noo->nomer_wakil_outlet ?? '-' }}</td>
-                                            <td>{{ $noo->kota }}</td>
+                                            <td>{{ $noo->distric }}</td>
                                             <td>{{ $noo->region->name }}</td>
                                             <td>{{ $noo->cluster->name }}</td>
-                                            <td><a href="{{ asset('storage/') . '/' . $noo->poto_ktp }}">Lihat Foto</a></td>
-                                            <td><a href="{{ asset('storage/') . '/' . $noo->poto_shop_sign }}">Lihat Foto</a>
+                                            <td><a href="{{ asset('storage/') . '/' . $noo->poto_ktp }}">Lihat Foto</a>
                                             </td>
-                                            <td><a href="{{ asset('storage/') . '/' . $noo->poto_etalase }}">Lihat Foto</a>
+                                            <td><a href="{{ asset('storage/') . '/' . $noo->poto_shop_sign }}">Lihat
+                                                    Foto</a>
                                             </td>
-                                            <td><a href="{{ asset('storage/') . '/' . $noo->poto_depan }}">Lihat Foto</a></td>
-                                            <td><a href="{{ asset('storage/') . '/' . $noo->poto_kanan }}">Lihat Foto</a></td>
-                                            <td><a href="{{ asset('storage/') . '/' . $noo->poto_kiri }}">Lihat Foto</a></td>
-                                            <td><a href="{{ asset('storage/') . '/' . $noo->poto_belakang }}">Lihat Foto</a>
+                                            <td><a href="{{ asset('storage/') . '/' . $noo->poto_etalase }}">Lihat
+                                                    Foto</a>
                                             </td>
-                                            <td><a href="{{ asset('storage/') . '/' . $noo->video }}">Lihat Video</a></td>
+                                            <td><a href="{{ asset('storage/') . '/' . $noo->poto_depan }}">Lihat Foto</a>
+                                            </td>
+                                            <td><a href="{{ asset('storage/') . '/' . $noo->poto_kanan }}">Lihat Foto</a>
+                                            </td>
+                                            <td><a href="{{ asset('storage/') . '/' . $noo->poto_kiri }}">Lihat Foto</a>
+                                            </td>
+                                            <td><a href="{{ asset('storage/') . '/' . $noo->poto_belakang }}">Lihat
+                                                    Foto</a>
+                                            </td>
+                                            <td><a href="{{ asset('storage/') . '/' . $noo->video }}">Lihat Video</a>
+                                            </td>
                                             <td>{{ $noo->oppo }}</td>
                                             <td>{{ $noo->vivo }}</td>
                                             <td>{{ $noo->samsung }}</td>
@@ -112,6 +133,8 @@
                                                     Lokasi</a></td>
                                             <td>Rp {{ number_format($noo->limit, 0, ',', '.') }}</td>
                                             <td>{{ $noo->status }}</td>
+                                            <td>{{ $noo->confirmed_by ?? '-' }}</td>
+                                            <td>{{ $noo->confirmed_at == null ? '-' : date('d M Y', $noo->confirmed_at / 1000) }}
                                             <td>{{ $noo->approved_by ?? '-' }}</td>
                                             <td>{{ $noo->approved_at == null ? '-' : date('d M Y', $noo->approved_at / 1000) }}
                                             </td>
@@ -119,6 +142,13 @@
                                             <td>{{ $noo->rejected_at == null ? '-' : date('d M Y', $noo->rejected_at / 1000) }}
                                             </td>
                                             <td>{{ $noo->keterangan ?? '-' }}</td>
+                                            @if ($noo->status != 'APPROVED')
+                                                <td>
+                                                    <a href="/noo/{{ $noo->id }}" class="badge bg-warning"><span><i
+                                                                class="fas fa-edit"></i></span></a>
+                                                </td>
+                                            @endif
+
                                         </tr>
                                     @endforeach
                                 </tbody>

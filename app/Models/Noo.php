@@ -43,6 +43,11 @@ class Noo extends Model
         return $this->belongsTo(Division::class);
     }
 
+    public function tm()
+    {
+        return $this->belongsTo(User::class,'tm_id');
+    }
+
     public function getConfirmedAtAttribute($value)
     {
         if($value){

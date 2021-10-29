@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             // OutletSeeder::class,
             // PlanVisitSeeder::class,
-            NooSeeder::class,
+            // NooSeeder::class,
             // VisitSeeder::class,
             ClusterSeeder::class,
             RegionSeeder::class,

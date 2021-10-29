@@ -16,7 +16,7 @@ class VisitController extends Controller
      */
     public function index()
     {
-        $visits = Visit::all();
+        $visits = Visit::with(['user','outlet'])->latest()->paginate(10);
         return view('visit.index',[
             'visits' => $visits,
             'title' => 'Visit',
@@ -30,7 +30,7 @@ class VisitController extends Controller
         {
             return Excel::download(new VisitExport($request->tanggal1,$request->tanggal2),'visit.xlsx');
         }else{
-            $visits = Visit::all();
+            $visits = Visit::with(['user','outlet'])->get();
             return view('visit.index',[
                 'visits' => $visits,
                 'title' => 'Visit',

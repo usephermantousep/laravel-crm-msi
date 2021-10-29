@@ -46,7 +46,7 @@ class UserController extends Controller
                 ],'Gagal login, cek kembali username dan password anda', 500);
             }
 
-            $user = User::with(['region','cluster','role','divisi','badanusaha'])->where('username', $request->username)->first();
+            $user = User::with(['region','cluster','role','divisi','badanusaha','tm'])->where('username', $request->username)->first();
             if ( !Hash::check($request->password, $user->password, [])) {
                 throw new Exception('Invalid Credentials');
             }

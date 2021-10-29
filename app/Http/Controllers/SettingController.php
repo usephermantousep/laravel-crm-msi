@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ResponseFormatter;
 use App\Models\BadanUsaha;
 use App\Models\Cluster;
 use App\Models\Division;
@@ -15,12 +16,19 @@ class SettingController extends Controller
     //ROLE
     public function role(Request $request)
     {
-        $roles = Role::all();
+        $roles = Role::orderBy('name')->get();
+        $badanusahas = BadanUsaha::orderBy('name')->get();
+        $clusters = Cluster::orderBy('name')->get();
+        $divisis = Division::orderBy('name')->get();
+        $regions = Region::orderBy('name')->get();
         return view('settings.index', [
             'title' => 'Role',
             'active' => 'setting',
             'roles' => $roles,
-
+            'badanusahas' => $badanusahas,
+            'clusters' => $clusters,
+            'divisis' => $divisis,
+            'regions' => $regions,
         ]);
     }
 
@@ -60,7 +68,7 @@ class SettingController extends Controller
 
             $role = Role::findOrFail($id);
             $role->update([
-                'name' => preg_replace('/\s+/', '', strtoupper($request->rolename)),
+                'name' => preg_replace('/\s+/', '', strtoupper($request->name)),
             ]);
 
             return redirect('setting/role')->with(['success' => 'Berhasil update role']);
@@ -72,12 +80,17 @@ class SettingController extends Controller
     //BADAN USAHA
     public function badanusaha(Request $request)
     {
-        $badanusahas = BadanUsaha::all();
+        $badanusahas = BadanUsaha::orderBy('name')->get();
+        $clusters = Cluster::orderBy('name')->get();
+        $divisis = Division::orderBy('name')->get();
+        $regions = Region::orderBy('name')->get();
         return view('settings.index', [
             'title' => 'Badan Usaha',
             'active' => 'setting',
             'badanusahas' => $badanusahas,
-
+            'clusters' => $clusters,
+            'divisis' => $divisis,
+            'regions' => $regions,
         ]);
     }
 
@@ -130,11 +143,17 @@ class SettingController extends Controller
     //DIVISI
     public function divisi(Request $request)
     {
-        $divisis = Division::all();
+        $clusters = Cluster::orderBy('name')->get();
+        $badanusahas = BadanUsaha::orderBy('name')->get();
+        $divisis = Division::with(['badanusaha'])->orderBy('name')->get();
+        $regions = Region::orderBy('name')->get();
         return view('settings.index', [
             'title' => 'Divisi',
             'active' => 'setting',
             'divisis' => $divisis,
+            'badanusahas' => $badanusahas,
+            'clusters' => $clusters,
+            'regions' => $regions,
 
         ]);
     }
@@ -144,15 +163,17 @@ class SettingController extends Controller
         try {
             $request->validate([
                 'name' => 'required',
+                'badanusaha_id' => 'required',
             ]);
 
             Division::create([
                 'name' => preg_replace('/\s+/', '', strtoupper($request->name)),
+                'badanusaha_id' => $request->badanusaha_id,
             ]);
 
             return redirect('/setting/divisi')->with(['success' => "Berhasil menambahkan divisi baru"]);
         } catch (Exception $e) {
-            return redirect('/setting/divisi')->with(['error' => "Gagal menambahkan divisi baru,".$e->getMessage()]);
+            return redirect('/setting/divisi')->with(['error' => "Gagal menambahkan divisi baru," . $e->getMessage()]);
         }
     }
 
@@ -168,7 +189,7 @@ class SettingController extends Controller
         ]);
     }
 
-    public function divupdate(Request $request,$id)
+    public function divupdate(Request $request, $id)
     {
         try {
             $request->validate([
@@ -189,16 +210,21 @@ class SettingController extends Controller
     //REGION
     public function region(Request $request)
     {
-        $regions = Region::all();
+        $clusters = Cluster::orderBy('name')->get();
+        $badanusahas = BadanUsaha::orderBy('name')->get();
+        $divisis = Division::orderBy('name')->get();
+        $regions = Region::with(['badanusaha', 'divisi'])->orderBy('name')->get();
         return view('settings.index', [
             'title' => 'Region',
             'active' => 'setting',
             'regions' => $regions,
-
+            'badanusahas' => $badanusahas,
+            'divisis' => $divisis,
+            'clusters' => $clusters,
         ]);
     }
 
-    public function regedit(Request $request,$id)
+    public function regedit(Request $request, $id)
     {
         $region = Region::findOrFail($id);
 
@@ -215,19 +241,23 @@ class SettingController extends Controller
         try {
             $request->validate([
                 'name' => 'required',
+                'badanusaha_id' => 'required',
+                'divisi_id' => 'required',
             ]);
 
             Region::create([
                 'name' => preg_replace('/\s+/', '', strtoupper($request->name)),
+                'badanusaha_id' => $request->badanusaha_id,
+                'divisi_id' => $request->divisi_id,
             ]);
 
             return redirect('/setting/region')->with(['success' => "Berhasil menambahkan region baru"]);
         } catch (Exception $e) {
-            return redirect('/setting/region')->with(['error' => "Gagal menambahkan region baru,".$e->getMessage()]);
+            return redirect('/setting/region')->with(['error' => "Gagal menambahkan region baru," . $e->getMessage()]);
         }
     }
 
-    public function regupdate(Request $request,$id)
+    public function regupdate(Request $request, $id)
     {
         try {
             $request->validate([
@@ -248,16 +278,21 @@ class SettingController extends Controller
     //CLUSTER
     public function cluster(Request $request)
     {
-        $clusters = Cluster::all();
+        $clusters = Cluster::with(['region', 'divisi', 'badanusaha'])->orderBy('name')->get();
+        $badanusahas = BadanUsaha::orderBy('name')->get();
+        $divisis = Division::orderBy('name')->get();
+        $regions = Region::orderBy('name')->get();
         return view('settings.index', [
             'title' => 'Cluster',
             'active' => 'setting',
             'clusters' => $clusters,
-
+            'badanusahas' => $badanusahas,
+            'divisis' => $divisis,
+            'regions' => $regions,
         ]);
     }
 
-    public function clusedit(Request $request,$id)
+    public function clusedit(Request $request, $id)
     {
         $cluster = Cluster::findOrFail($id);
 
@@ -273,19 +308,25 @@ class SettingController extends Controller
         try {
             $request->validate([
                 'name' => 'required',
+                'badanusaha_id' => 'required',
+                'divisi_id' => 'required',
+                'region_id' => 'required',
             ]);
 
             Cluster::create([
                 'name' => preg_replace('/\s+/', '', strtoupper($request->name)),
+                'badanusaha_id' => $request->badanusaha_id,
+                'divisi_id' => $request->divisi_id,
+                'region_id' => $request->region_id,
             ]);
 
             return redirect('/setting/cluster')->with(['success' => "Berhasil menambahkan cluster baru"]);
         } catch (Exception $e) {
-            return redirect('/setting/cluster')->with(['error' => "Gagal menambahkan cluster baru,".$e->getMessage()]);
+            return redirect('/setting/cluster')->with(['error' => "Gagal menambahkan cluster baru," . $e->getMessage()]);
         }
     }
 
-    public function clusupdate(Request $request,$id)
+    public function clusupdate(Request $request, $id)
     {
         try {
             $request->validate([
@@ -302,4 +343,26 @@ class SettingController extends Controller
             return redirect('/setting/cluster')->with(['error' => "Gagal update cluster," . $e->getMessage()]);
         }
     }
+
+    public function getdivisi(Request $request)
+    {
+        $divisis = Division::all();
+        return ResponseFormatter::success($divisis,'berhasil');
+    }
+
+    public function getregion(Request $request)
+    {
+        $divisi_id = Division::where('name',$request->divisi)->first()->id;
+        $regions = Region::where('divisi_id',$divisi_id)->get();
+        return ResponseFormatter::success($regions,'berhasil');
+    }
+
+    public function download(Request $request)
+    {
+        return response()->download(public_path('/storage/apk/grosir.apk'),'grosirapp.apk',[
+            'Content-Type'=>'application/vnd.android.package-archive',
+    'Content-Disposition'=> 'attachment; filename="android.apk"',
+        ]);
+    }
+
 }

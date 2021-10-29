@@ -76,7 +76,7 @@
                                                     @foreach ($regions as $region)
                                                         <option value="{{ $region->id }}"
                                                             {{ $region->id === $user->region_id ? 'selected' : '' }}>
-                                                            {{ $region->name }}</option>
+                                                            {{ $region->name.' - '.$region->divisi->name.' - '.$region->badanusaha->name }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>

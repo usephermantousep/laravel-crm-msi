@@ -42,8 +42,11 @@ Route::post('/masuk',[LoginController::class,'login']);
     ##NOO
     Route::get('/noo/export',[NooController::class,'export']);
 
-    ##PLA
+    ##VISIT
     Route::get('/visit/export',[VisitController::class,'export']);
+
+    ##PLANVISIT
+    Route::get('/planvisit/export',[PlanVisitController::class,'export']);
 
 #IMPORT
     ##USER
@@ -60,8 +63,9 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::get('/dashboard/logout',[DashboardController::class,'logout']);
 
     ##NOO
-    Route::get('/noo',[NooController::class,'index']);
+    Route::get('/noo',[NooController::class,'index'])->name('noo');
     Route::get('/noo/{id}',[NooController::class,'show']);
+    Route::post('noo/{id}',[NooController::class,'update']);
 
     ##OUTLET
     Route::get('/outlet',[OutletController::class,'index'])->name('outlet');
@@ -112,10 +116,18 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
         Route::post('/setting/cluster',[SettingController::class,'clusadd']);
         Route::post('/setting/cluster/{id}',[SettingController::class,'clusupdate']);
 
+        ##LINK SELECT
+        Route::get('/setting/getdivisi',[SettingController::class,'getdivisi']);
+        Route::get('/setting/getregion',[SettingController::class,'getregion']);
+
 });
 
+Route::get('download/app',[SettingController::class,'download']);
+
 Route::get('/tes',function (Request $request){
-    Log::channel('custom')->info('halo');
-})->middleware('logku');
+    // Log::channel('custom')->info('halo');
+    // phpinfo();
+    dd(today());
+});
 
 

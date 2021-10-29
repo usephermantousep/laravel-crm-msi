@@ -15,6 +15,7 @@ class Division extends Migration
     {
         Schema::create('divisions', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('badanusaha_id');
             $table->string('name');
             $table->timestamps();
         });

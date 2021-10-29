@@ -25,8 +25,8 @@ class OutletController extends Controller
     public function index()
     {
 
-        $outlets = Outlet::with('badanusaha', 'cluster', 'region', 'divisi');
-        $users = User::all();
+        $outlets = Outlet::with(['badanusaha', 'cluster', 'region', 'divisi']);
+        $users = User::with(['tm'])->get();
 
         return view('outlet.index', [
             'outlets' => $outlets->filter()->orderBy('kode_outlet')->paginate(10),

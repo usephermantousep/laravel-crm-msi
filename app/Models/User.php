@@ -32,9 +32,9 @@ class User extends Authenticatable
         return $this->hasMany(Outlet::class);
     }
 
-    public function noo()
+    public function nootm()
     {
-        return $this->hasMany(Noo::class);
+        return $this->hasMany(Noo::class,'tm_id');
     }
 
     public function visit()
@@ -70,6 +70,11 @@ class User extends Authenticatable
     public function badanusaha()
     {
         return $this->belongsTo(BadanUsaha::class);
+    }
+
+    public function tm()
+    {
+        return $this->belongsTo(User::class,'tm_id');
     }
 
     /**

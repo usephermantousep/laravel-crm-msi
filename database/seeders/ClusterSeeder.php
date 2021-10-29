@@ -16,100 +16,466 @@ class ClusterSeeder extends Seeder
     {
         Cluster::insert([
             [
-            'name' => 'CW1',
+                'badanusaha_id' => 1,
+                'divisi_id' => 1,
+                'region_id' => 1,
+                'name' => 'CSW1'
             ],
             [
-            'name' => 'CW2',
+                'badanusaha_id' => 1,
+                'divisi_id' => 1,
+                'region_id' => 1,
+                'name' => 'CSW2'
             ],
             [
-            'name' => 'CW3',
+                'badanusaha_id' => 1,
+                'divisi_id' => 1,
+                'region_id' => 1,
+                'name' => 'CSW3'
             ],
             [
-            'name' => 'CW4',
+                'badanusaha_id' => 1,
+                'divisi_id' => 1,
+                'region_id' => 1,
+                'name' => 'CSW4'
             ],
             [
-            'name' => 'CW5',
+                'badanusaha_id' => 1,
+                'divisi_id' => 1,
+                'region_id' => 1,
+                'name' => 'CSW5'
             ],
             [
-            'name' => 'CW6',
+                'badanusaha_id' => 1,
+                'divisi_id' => 1,
+                'region_id' => 1,
+                'name' => 'CSW6'
             ],
             [
-            'name' => 'CW7',
+                'badanusaha_id' => 2,
+                'divisi_id' => 2,
+                'region_id' => 2,   
+                'name' => 'CWO1'
             ],
             [
-            'name' => 'CW8',
+                'badanusaha_id' => 2,
+                'divisi_id' => 2,
+                'region_id' => 2,
+                'name' => 'CWO2'
             ],
             [
-            'name' => 'CW9',
+                'badanusaha_id' => 2,
+                'divisi_id' => 2,
+                'region_id' => 2,
+                'name' => 'CWO3'
             ],
             [
-            'name' => 'CW10',
+                'badanusaha_id' => 2,
+                'divisi_id' => 2,
+                'region_id' => 2,
+                'name' => 'CWO4'
             ],
             [
-            'name' => 'CJ1',
+                'badanusaha_id' => 2,
+                'divisi_id' => 2,
+                'region_id' => 2,
+                'name' => 'CWO5'
             ],
             [
-            'name' => 'CJ2',
+                'badanusaha_id' => 2,
+                'divisi_id' => 2,
+                'region_id' => 2,
+                'name' => 'CWO6'
             ],
             [
-            'name' => 'CJ3',
+                'badanusaha_id' => 2,
+                'divisi_id' => 2,
+                'region_id' => 2,
+                'name' => 'CWO7'
             ],
             [
-            'name' => 'CJ4',
+                'badanusaha_id' => 2,
+                'divisi_id' => 2,
+                'region_id' => 2,
+                'name' => 'CWO8'
             ],
             [
-            'name' => 'CJ5',
+                'badanusaha_id' => 2,
+                'divisi_id' => 2,
+                'region_id' => 2,
+                'name' => 'CWO9'
             ],
             [
-            'name' => 'CJ6',
+                'badanusaha_id' => 2,
+                'divisi_id' => 2,
+                'region_id' => 2,
+                'name' => 'CWO10'
             ],
             [
-            'name' => 'CJ7',
+                'badanusaha_id' => 1,
+                'divisi_id' => 1,
+                'region_id' => 3,
+                'name' => 'CNW1',
             ],
             [
-            'name' => 'CJ8',
+                'badanusaha_id' => 1,
+                'divisi_id' => 1,
+                'region_id' => 3,
+                'name' => 'CNW2',
             ],
             [
-            'name' => 'CJ9',
+                'badanusaha_id' => 1,
+                'divisi_id' => 1,
+                'region_id' => 3,
+                'name' => 'CNW3',
             ],
             [
-            'name' => 'CJ10',
+                'badanusaha_id' => 1,
+                'divisi_id' => 1,
+                'region_id' => 3,
+                'name' => 'CNW4',
             ],
             [
-            'name' => 'EJ1',
+                'badanusaha_id' => 1,
+                'divisi_id' => 1,
+                'region_id' => 3,
+                'name' => 'CNW5',
             ],
             [
-            'name' => 'EJ2',
+                'badanusaha_id' => 1,
+                'divisi_id' => 1,
+                'region_id' => 6,
+                'name' => 'CNC1',
             ],
             [
-            'name' => 'EJ3',
+                'badanusaha_id' => 1,
+                'divisi_id' => 1,
+                'region_id' => 6,
+                'name' => 'CNC2',
             ],
             [
-            'name' => 'EJ4',
+                'badanusaha_id' => 1,
+                'divisi_id' => 1,
+                'region_id' => 6,
+                'name' => 'CNC3',
             ],
             [
-            'name' => 'EJ5',
+                'badanusaha_id' => 1,
+                'divisi_id' => 1,
+                'region_id' => 6,
+                'name' => 'CNC4',
             ],
             [
-            'name' => 'EJ6',
+                'badanusaha_id' => 1,
+                'divisi_id' => 1,
+                'region_id' => 6,
+                'name' => 'CNC5',
             ],
             [
-            'name' => 'EJ7',
+                'badanusaha_id' => 2,
+                'divisi_id' => 4,
+                'region_id' => 13,
+                'name' => 'CWR1',
             ],
             [
-            'name' => 'EJ8',
+                'badanusaha_id' => 2,
+                'divisi_id' => 4,
+                'region_id' => 13,
+                'name' => 'CWR2',
             ],
             [
-            'name' => 'EJ9',
+                'badanusaha_id' => 2,
+                'divisi_id' => 4,
+                'region_id' => 13,
+                'name' => 'CWR3',
             ],
             [
-            'name' => 'EJ10',
+                'badanusaha_id' => 2,
+                'divisi_id' => 4,
+                'region_id' => 13,
+                'name' => 'CWR4',
             ],
             [
-            'name' => 'JBO',
+                'badanusaha_id' => 2,
+                'divisi_id' => 4,
+                'region_id' => 13,
+                'name' => 'CWR5',
             ],
             [
-            'name' => '-',
+                'badanusaha_id' => 2,
+                'divisi_id' => 4,
+                'region_id' => 13,
+                'name' => 'CWR6',
+            ],
+            [
+                'badanusaha_id' => 2,
+                'divisi_id' => 4,
+                'region_id' => 13,
+                'name' => 'CWR7',
+            ],
+            [
+                'badanusaha_id' => 2,
+                'divisi_id' => 4,
+                'region_id' => 13,
+                'name' => 'CWR8',
+            ],
+            [
+                'badanusaha_id' => 2,
+                'divisi_id' => 4,
+                'region_id' => 14,
+                'name' => 'CJR1',
+            ],
+            [
+                'badanusaha_id' => 2,
+                'divisi_id' => 4,
+                'region_id' => 14,
+                'name' => 'CJR2',
+            ],
+            [
+                'badanusaha_id' => 2,
+                'divisi_id' => 4,
+                'region_id' => 14,
+                'name' => 'CJR3',
+            ],
+            [
+                'badanusaha_id' => 2,
+                'divisi_id' => 4,
+                'region_id' => 14,
+                'name' => 'CJR4',
+            ],
+            [
+                'badanusaha_id' => 2,
+                'divisi_id' => 4,
+                'region_id' => 14,
+                'name' => 'CJR5',
+            ],
+            [
+                'badanusaha_id' => 2,
+                'divisi_id' => 4,
+                'region_id' => 16,
+                'name' => 'CJR9',
+            ],
+            [
+                'badanusaha_id' => 2,
+                'divisi_id' => 4,
+                'region_id' => 16,
+                'name' => 'CJR10',
+            ],
+            [
+                'badanusaha_id' => 2,
+                'divisi_id' => 4,
+                'region_id' => 16,
+                'name' => 'CJR11',
+            ],
+            [
+                'badanusaha_id' => 2,
+                'divisi_id' => 4,
+                'region_id' => 16,
+                'name' => 'CJR12',
+            ],
+            [
+                'badanusaha_id' => 2,
+                'divisi_id' => 4,
+                'region_id' => 16,
+                'name' => 'CJR13',
+            ],
+            [
+                'badanusaha_id' => 2,
+                'divisi_id' => 4,
+                'region_id' => 16,
+                'name' => 'CJR14',
+            ],
+            [
+                'badanusaha_id' => 2,
+                'divisi_id' => 4,
+                'region_id' => 16,
+                'name' => 'CJR15',
+            ],
+            [
+                'badanusaha_id' => 2,
+                'divisi_id' => 4,
+                'region_id' => 16,
+                'name' => 'CJR16',
+            ],
+            [
+                'badanusaha_id' => 2,
+                'divisi_id' => 4,
+                'region_id' => 16,
+                'name' => 'CJR17',
+            ],
+            [
+                'badanusaha_id' => 2,
+                'divisi_id' => 3,
+                'region_id' => 5,
+                'name' => 'CWT1',
+            ],
+            [
+                'badanusaha_id' => 2,
+                'divisi_id' => 3,
+                'region_id' => 5,
+                'name' => 'CWT2',
+            ],
+            [
+                'badanusaha_id' => 2,
+                'divisi_id' => 3,
+                'region_id' => 5,
+                'name' => 'CWT3',
+            ],
+            [
+                'badanusaha_id' => 2,
+                'divisi_id' => 3,
+                'region_id' => 8,
+                'name' => 'CJT1',
+            ],
+            [
+                'badanusaha_id' => 2,
+                'divisi_id' => 3,               
+                'region_id' => 8,
+                'name' => 'CJT2',
+            ],
+            [
+                'badanusaha_id' => 2,
+                'divisi_id' => 2,
+                'region_id' => 4,
+                'name' => 'CWO11',
+            ],
+            [
+                'badanusaha_id' => 2,
+                'divisi_id' => 2,
+                'region_id' => 4,
+                'name' => 'CWO12',
+            ],
+            [
+                'badanusaha_id' => 2,
+                'divisi_id' => 2,
+                'region_id' => 4,
+                'name' => 'CWO13',
+            ],
+            [
+                'badanusaha_id' => 2,
+                'divisi_id' => 2,
+                'region_id' => 4,
+                'name' => 'CWO14',
+            ],
+            [
+                'badanusaha_id' => 2,
+                'divisi_id' => 2,
+                'region_id' => 7,
+                'name' => 'CJO1',
+            ],
+            [
+                'badanusaha_id' => 2,
+                'divisi_id' => 2,               
+                'region_id' => 7,
+                'name' => 'CJO2',
+            ],
+            [
+                'badanusaha_id' => 1,
+                'divisi_id' => 1,
+                'region_id' => 9,
+                'name' => 'CSC1',
+            ],
+            [
+                'badanusaha_id' => 1,
+                'divisi_id' => 1,
+                'region_id' => 9,
+                'name' => 'CSC2',
+            ],
+            [
+                'badanusaha_id' => 1,
+                'divisi_id' => 1,
+                'region_id' => 9,
+                'name' => 'CSC3',
+            ],
+            [
+                'badanusaha_id' => 1,
+                'divisi_id' => 1,
+                'region_id' => 9,
+                'name' => 'CSC4',
+            ],
+            [
+                'badanusaha_id' => 1,
+                'divisi_id' => 1,
+                'region_id' => 9,
+                'name' => 'CSC5',
+            ],
+            [
+                'badanusaha_id' => 2,
+                'divisi_id' => 4,
+                'region_id' => 15,
+                'name' => 'CJR6',
+            ],
+            [
+                'badanusaha_id' => 2,
+                'divisi_id' => 4,
+                'region_id' => 15,
+                'name' => 'CJR7',
+            ],
+            [
+                'badanusaha_id' => 2,
+                'divisi_id' => 4,
+                'region_id' => 15,
+                'name' => 'CJR8',
+            ],
+            [
+                'badanusaha_id' => 2,
+                'divisi_id' => 3,
+                'region_id' => 11,
+                'name' => 'CJT3',
+            ],
+            [
+                'badanusaha_id' => 2,
+                'divisi_id' => 3,
+                'region_id' => 11,
+                'name' => 'CJT4',
+            ],
+            [
+                'badanusaha_id' => 2,
+                'divisi_id' => 2,
+                'region_id' => 10,
+                'name' => 'CJO3',
+            ],
+            [
+                'badanusaha_id' => 2,
+                'divisi_id' => 2,
+                'region_id' => 10,
+                'name' => 'CJO4',
+            ],
+            [
+                'badanusaha_id' => 2,
+                'divisi_id' => 2,
+                'region_id' => 12,
+                'name' => 'EJO1',
+            ],
+            [
+                'badanusaha_id' => 2,
+                'divisi_id' => 2,
+                'region_id' => 12,
+                'name' => 'EJO2',
+            ],
+            [
+                'badanusaha_id' => 2,
+                'divisi_id' => 2,
+                'region_id' => 12,
+                'name' => 'EJO3',
+            ],
+            [
+                'badanusaha_id' => 2,
+                'divisi_id' => 2,
+                'region_id' => 12,
+                'name' => 'EJO4',
+            ],
+            [
+                'badanusaha_id' => 3,
+                'divisi_id' => 5,
+                'region_id' => 17,
+                'name' => '-',
+            ],
+            [
+                'badanusaha_id' => 1,
+                'divisi_id' => 1,
+                'region_id' => 18,
+                'name' => 'JBO'
             ],
         ]);
     }

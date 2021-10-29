@@ -31,4 +31,19 @@ class Division extends Model
     {
         return $this->hasMany(Noo::class);
     }
+
+    public function badanusaha()
+    {
+        return $this->belongsTo(BadanUsaha::class);
+    }
+
+    public function region()
+    {
+        return $this->hasMany(Region::class);
+    }
+
+    public function cluster()
+    {
+        return $this->hasMany(Cluster::class);
+    }
 }

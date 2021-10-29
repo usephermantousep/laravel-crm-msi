@@ -19,6 +19,7 @@ class UserTempateExport implements WithHeadings
             'divisi',
             'region',
             'cluster',
+            'tm',
             'password',
         ];
     }
