@@ -39,133 +39,134 @@
                                             <h3 class="card-title">Cluster Setting</h3>
                                             <button type="button" data-toggle="modal" data-target="#addCluster"
                                                 class="badge bg-success mx-3 elevation-0">Add</button>
-
                                     @endswitch
                                 </div>
                             </div>
-                        </div>
-                        @if ($message = Session::get('success'))
-                            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </div>
-                        @endif
-                        @if ($message = Session::get('error'))
-                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </div>
-                        @endif
-                        <!-- /.card-header -->
-                        <div class="card-body table-responsive p-0" style="height: 500px;">
-                            <table class="table table-head-fixed text-nowrap">
-                                <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Name</th>
+
+                            @if ($message = Session::get('success'))
+                                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </div>
+                            @endif
+                            @if ($message = Session::get('error'))
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </div>
+                            @endif
+                            <!-- /.card-header -->
+                            <div class="card-body table-responsive p-0" style="height: 500px;">
+                                <table class="table table-head-fixed text-nowrap">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Name</th>
+                                            @switch($title)
+                                                @case('Divisi')
+                                                    <th>Badan Usaha</th>
+                                                @break
+
+                                                @case('Region')
+                                                    <th>Badan Usaha</th>
+                                                    <th>Divisi</th>
+                                                @break
+
+                                                @case('Cluster')
+                                                    <th>Badan Usaha</th>
+                                                    <th>Divisi</th>
+                                                    <th>Region</th>
+                                                @break
+
+                                                @default
+                                            @endswitch
+                                            <th>Edit</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
                                         @switch($title)
+                                            @case('Role')
+                                                @foreach ($roles as $role)
+                                                    <tr>
+                                                        <td>{{ $loop->iteration }}</td>
+                                                        <td>{{ $role->name }}</td>
+                                                        <td>
+                                                            <a href="/setting/role/{{ $role->id }}"
+                                                                class="badge bg-warning"><span><i
+                                                                        class="fas fa-edit"></i></span></a>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            @break
+
+                                            @case('Badan Usaha')
+                                                @foreach ($badanusahas as $badanusaha)
+                                                    <tr>
+                                                        <td>{{ $loop->iteration }}</td>
+                                                        <td>{{ $badanusaha->name }}</td>
+                                                        <td>
+                                                            <a href="/setting/badanusaha/{{ $badanusaha->id }}"
+                                                                class="badge bg-warning"><span><i
+                                                                        class="fas fa-edit"></i></span></a>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            @break
+
                                             @case('Divisi')
-                                                <th>Badan Usaha</th>
+                                                @foreach ($divisis as $divisi)
+                                                    <tr>
+                                                        <td>{{ $loop->iteration }}</td>
+                                                        <td>{{ $divisi->name }}</td>
+                                                        <td>{{ $divisi->badanusaha->name }}</td>
+                                                        <td>
+                                                            <a href="/setting/divisi/{{ $divisi->id }}"
+                                                                class="badge bg-warning"><span><i
+                                                                        class="fas fa-edit"></i></span></a>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
                                             @break
+
                                             @case('Region')
-                                                <th>Badan Usaha</th>
-                                                <th>Divisi</th>
-                                            @break
-                                            @case('Cluster')
-                                                <th>Badan Usaha</th>
-                                                <th>Divisi</th>
-                                                <th>Region</th>
+                                                @foreach ($regions as $region)
+                                                    <tr>
+                                                        <td>{{ $loop->iteration }}</td>
+                                                        <td>{{ $region->name }}</td>
+                                                        <td>{{ $region->badanusaha->name }}</td>
+                                                        <td>{{ $region->divisi->name }}</td>
+                                                        <td>
+                                                            <a href="/setting/region/{{ $region->id }}"
+                                                                class="badge bg-warning"><span><i
+                                                                        class="fas fa-edit"></i></span></a>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
                                             @break
 
                                             @default
-
+                                                @foreach ($clusters as $cluster)
+                                                    <tr>
+                                                        <td>{{ $loop->iteration }}</td>
+                                                        <td>{{ $cluster->name }}</td>
+                                                        <td>{{ $cluster->badanusaha->name }}</td>
+                                                        <td>{{ $cluster->divisi->name }}</td>
+                                                        <td>{{ $cluster->region->name }}</td>
+                                                        <td>
+                                                            <a href="/setting/cluster/{{ $cluster->id }}"
+                                                                class="badge bg-warning"><span><i
+                                                                        class="fas fa-edit"></i></span></a>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
                                         @endswitch
-                                        <th>Edit</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @switch($title)
-                                        @case('Role')
-                                            @foreach ($roles as $role)
-                                                <tr>
-                                                    <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ $role->name }}</td>
-                                                    <td>
-                                                        <a href="/setting/role/{{ $role->id }}"
-                                                            class="badge bg-warning"><span><i
-                                                                    class="fas fa-edit"></i></span></a>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        @break
 
-                                        @case('Badan Usaha')
-                                            @foreach ($badanusahas as $badanusaha)
-                                                <tr>
-                                                    <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ $badanusaha->name }}</td>
-                                                    <td>
-                                                        <a href="/setting/badanusaha/{{ $badanusaha->id }}"
-                                                            class="badge bg-warning"><span><i
-                                                                    class="fas fa-edit"></i></span></a>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        @break
-
-                                        @case('Divisi')
-                                            @foreach ($divisis as $divisi)
-                                                <tr>
-                                                    <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ $divisi->name }}</td>
-                                                    <td>{{ $divisi->badanusaha->name }}</td>
-                                                    <td>
-                                                        <a href="/setting/divisi/{{ $divisi->id }}"
-                                                            class="badge bg-warning"><span><i
-                                                                    class="fas fa-edit"></i></span></a>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        @break
-
-                                        @case('Region')
-                                            @foreach ($regions as $region)
-                                                <tr>
-                                                    <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ $region->name }}</td>
-                                                    <td>{{ $region->badanusaha->name }}</td>
-                                                    <td>{{ $region->divisi->name }}</td>
-                                                    <td>
-                                                        <a href="/setting/region/{{ $region->id }}"
-                                                            class="badge bg-warning"><span><i
-                                                                    class="fas fa-edit"></i></span></a>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        @break
-
-                                        @default
-                                            @foreach ($clusters as $cluster)
-                                                <tr>
-                                                    <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ $cluster->name }}</td>
-                                                    <td>{{ $cluster->badanusaha->name }}</td>
-                                                    <td>{{ $cluster->divisi->name }}</td>
-                                                    <td>{{ $cluster->region->name }}</td>
-                                                    <td>
-                                                        <a href="/setting/cluster/{{ $cluster->id }}"
-                                                            class="badge bg-warning"><span><i class="fas fa-edit"></i></span></a>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                    @endswitch
-
-                                </tbody>
-                            </table>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /.card-body -->
                         </div>
-                        <!-- /.card-body -->
+                        <!-- /.card -->
                     </div>
-                    <!-- /.card -->
                 </div>
-            </div>
             </div><!-- /.container-fluid -->
         </section>
     </section>
@@ -346,7 +347,9 @@
                             <label for="region_id" class="form-label">Region</label>
                             <select class="custom-select" name="region_id" id="region_id" required>
                                 @foreach ($regions as $region)
-                                    <option value="{{ $region->id }}">{{ $region->name.'-'.$region->divisi->name.'-'.$region->badanusaha->name }}</option>
+                                    <option value="{{ $region->id }}">
+                                        {{ $region->name . '-' . $region->divisi->name . '-' . $region->badanusaha->name }}
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
@@ -366,7 +369,7 @@
             if (badanusaha_id) {
                 $.ajax({
                     type: "GET",
-                    
+
                     url: "/setting/getdivisi?badanusaha_id=" + badanusaha_id,
                     dataType: 'JSON',
                     success: function(res) {
@@ -399,8 +402,8 @@
            type:"GET",
            url:"/setting/getregion?badanusaha_id=" + badanusaha_id+"divisi_id="+,
            dataType: 'JSON',
-           success:function(res){         
-               console.log(res);      
+           success:function(res){
+               console.log(res);
             if(res){
                 $("#cluster_id").empty();
                 $("#cluster_id").append('<option>---Pilih Cluster---</option>');
@@ -414,7 +417,7 @@
         });
     }else{
         $("#cluster_id").empty();
-    }      
+    }
    });
     </script> --}}
 @endsection

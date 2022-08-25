@@ -22,7 +22,7 @@ class VisitExport implements FromCollection,WithMapping,WithHeadings
     */
     public function collection()
     {
-        return Visit::with(['user','outlet'])->whereBetween('tanggal_visit',[$this->tanggal1,$this->tanggal2])->get();
+        return Visit::with(['user.role','outlet.cluster','outlet.region','outlet.divisi','user'])->whereBetween('tanggal_visit',[$this->tanggal1,$this->tanggal2])->get();
     }
 
     public function headings(): array
@@ -30,8 +30,14 @@ class VisitExport implements FromCollection,WithMapping,WithHeadings
         return [
             'tanggal',
             'nama',
+            'role',
             'outlet',
+            'divisi',
+            'region',
+            'cluster',
             'tipe',
+	    'Foto CI',
+	    'Foto CO',
             'lokasi CI',
             'lokasi CO',
             'jam CI',
@@ -46,9 +52,15 @@ class VisitExport implements FromCollection,WithMapping,WithHeadings
     {
         return [
             date('d M Y',$visit->tanggal_visit/1000),
-            $visit->user->nama_lengkap,
-            $visit->outlet->nama_outlet,
+            $visit->user->nama_lengkap ?? '-',
+            $visit->user->role->name ?? '-',
+            $visit->outlet->nama_outlet ?? '-',
+            $visit->outlet->divisi->name ?? '-',
+            $visit->outlet->region->name ?? '-',
+            $visit->outlet->cluster->name ?? '-',
             $visit->tipe_visit,
+	    "http://grosir.mediaselularindonesia.com/storage/".$visit->picture_visit_in ?? '-',
+	    $visit->picture_visit_out ? "http://grosir.medaselularindonesia.com/storage/".$visit->picture_visit_out ?? '-' : '-',
             "https://www.google.com/maps/place/".$visit->latlong_in,
             $visit->latlong_out ? "https://www.google.com/maps/place/".$visit->latlong_out : '-',
             date('H:i',$visit->check_in_time/1000),

@@ -14,6 +14,24 @@ use Illuminate\Support\Str;
 
 class OutletController extends Controller
 {
+    public function all()
+    {
+        try {
+            $outlet = Outlet::with(['badanusaha', 'cluster', 'region', 'divisi'])
+                ->get();
+
+            return ResponseFormatter::success(
+                $outlet,
+                'berhasil'
+            );
+        } catch (Exception $e) {
+            return ResponseFormatter::error([
+                'message' => 'ada yang salah',
+                'error' => $e
+            ], 'ERROR', 500);
+        }
+    }
+
     public function fetch(Request $request)
     {
         try {
@@ -23,7 +41,6 @@ class OutletController extends Controller
                 case 1:
                     $divisi = Division::where('name', $request->divisi)->first()->id;
                     $region = Region::where('name', $request->region)->where('divisi_id', $divisi)->first()->id;
-                    error_log($region);
                     $outlet = $query
                         ->where('divisi_id', $divisi)
                         ->where('region_id', $region)
@@ -92,45 +109,37 @@ class OutletController extends Controller
             ]);
 
             $data = Outlet::where('kode_outlet', $request->kode_outlet)->first();
-            if (count($request->files) <= 7) {
-                for ($i = 0; $i <= 5; $i++) {
-                    $namaFoto = $request->file('photo' . $i)->getClientOriginalName();
-                    if (Str::contains($namaFoto, 'fotodepan')) {
-                        $data['poto_depan'] = $namaFoto;
-                    } else if (Str::contains($namaFoto, 'fotobelakang')) {
-                        $data['poto_belakang'] = $namaFoto;
-                    } else if (Str::contains($namaFoto, 'fotokanan')) {
-                        $data['poto_kanan'] = $namaFoto;
-                    } else if (Str::contains($namaFoto, 'fotokiri')) {
-                        $data['poto_kiri'] = $namaFoto;
-                    } else if (Str::contains($namaFoto, 'fotoetalase')) {
-                        $data['poto_etalase'] = $namaFoto;
-                    } else {
-                        $data['poto_shop_sign'] = $namaFoto;
-                    }
-                    $request->file('photo' . $i)->move(storage_path('app/public/'), $namaFoto);
-                }
-            } else {
-                for ($i = 0; $i <= 6; $i++) {
-                    $namaFoto = $request->file('photo' . $i)->getClientOriginalName();
-                    if (Str::contains($namaFoto, 'fotodepan')) {
-                        $data['poto_depan'] = $namaFoto;
-                    } else if (Str::contains($namaFoto, 'fotobelakang')) {
-                        $data['poto_belakang'] = $namaFoto;
-                    } else if (Str::contains($namaFoto, 'fotokanan')) {
-                        $data['poto_kanan'] = $namaFoto;
-                    } else if (Str::contains($namaFoto, 'fotokiri')) {
-                        $data['poto_kiri'] = $namaFoto;
-                    } else if (Str::contains($namaFoto, 'fotoetalase')) {
-                        $data['poto_etalase'] = $namaFoto;
-                    } else if (Str::contains($namaFoto, 'fotoktp')) {
-                        $data['poto_ktp'] = $namaFoto;
-                    } else {
-                        $data['poto_shop_sign'] = $namaFoto;
-                    }
-                    $request->file('photo' . $i)->move(storage_path('app/public/'), $namaFoto);
-                }
-            }
+            //            if (count($request->files) <= 5) {
+            //                for ($i = 0; $i <= 3; $i++) {
+            //                    $namaFoto = $request->file('photo' . $i)->getClientOriginalName();
+            //                    if (Str::contains($namaFoto, 'fotodepan')) {
+            //                        $data['poto_depan'] = $namaFoto;
+            //                    } else if (Str::contains($namaFoto, 'fotokanan')) {
+            //                        $data['poto_kanan'] = $namaFoto;
+            //                    } else if (Str::contains($namaFoto, 'fotokiri')) {
+            //                        $data['poto_kiri'] = $namaFoto;
+            //                    } else {
+            //                        $data['poto_shop_sign'] = $namaFoto;
+            //                    }
+            //                    $request->file('photo' . $i)->move(storage_path('app/public/'), $namaFoto);
+            //                }
+            //            } else {
+            //                for ($i = 0; $i <= 4; $i++) {
+            //                    $namaFoto = $request->file('photo' . $i)->getClientOriginalName();
+            //                    if (Str::contains($namaFoto, 'fotodepan')) {
+            //                        $data['poto_depan'] = $namaFoto;
+            //                    } else if (Str::contains($namaFoto, 'fotokanan')) {
+            //                        $data['poto_kanan'] = $namaFoto;
+            //                    } else if (Str::contains($namaFoto, 'fotokiri')) {
+            //                        $data['poto_kiri'] = $namaFoto;
+            //                    } else if (Str::contains($namaFoto, 'fotoktp')) {
+            //                        $data['poto_ktp'] = $namaFoto;
+            //                    } else {
+            //                        $data['poto_shop_sign'] = $namaFoto;
+            //                    }
+            //                    $request->file('photo' . $i)->move(storage_path('app/public/'), $namaFoto);
+            //                }
+            //            }
 
             if ($request->hasFile('video')) {
                 $name = $request->file('video')->getClientOriginalName();
@@ -141,8 +150,6 @@ class OutletController extends Controller
             $data['nomer_tlp_outlet'] = $request->nomer_tlp_outlet;
             $data['latlong'] = $request->latlong;
             $data->save();
-
-            error_log($data);
 
             return ResponseFormatter::success(null, 'berhasil Update');
         } catch (Exception $e) {

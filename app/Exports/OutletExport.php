@@ -8,14 +8,15 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 
-class OutletExport implements FromCollection,WithMapping,WithHeadings
+class OutletExport implements FromCollection, WithMapping, WithHeadings
 {
     /**
-    * @return \Illuminate\Support\Collection
-    */
+     * @return \Illuminate\Support\Collection
+     */
     public function collection()
     {
-        return Outlet::with(['cluster','region','badanusaha'])->orderBy('nama_outlet')->get();
+        return Outlet::with(['cluster', 'region', 'badanusaha'])->whereIn('divisi_id',[2,4])
+            ->orderBy('nama_outlet')->get();
     }
 
     public function headings(): array
@@ -42,9 +43,8 @@ class OutletExport implements FromCollection,WithMapping,WithHeadings
         ];
     }
 
-    public function map($outlet) : array 
+    public function map($outlet): array
     {
-        error_log($outlet->nama_outlet);
         return [
             $outlet->badanusaha->name,
             $outlet->divisi->name,
@@ -55,15 +55,15 @@ class OutletExport implements FromCollection,WithMapping,WithHeadings
             $outlet->alamat_outlet,
             $outlet->distric,
             $outlet->status_outlet,
-            $outlet->radius.' Meter',
-            'Rp '.number_format($outlet->limit,0,',','.'),
+            $outlet->radius . ' Meter',
+            'Rp ' . number_format($outlet->limit, 0, ',', '.'),
             $outlet->latlong,
             $outlet->nama_pemilik_outlet,
             $outlet->nomer_tlp_outlet,
             User::where('divisi_id', $outlet->divisi_id)->where('region_id', $outlet->region_id)->where('role_id', 2)->first()->tm->nama_lengkap  ?? 'VACANT',
             User::where('divisi_id', $outlet->divisi_id)->where('region_id', $outlet->region_id)->where('role_id', 2)->first()->nama_lengkap ?? 'VACANT',
-            User::where('divisi_id', $outlet->divisi_id)->where('region_id', $outlet->region_id)->where('cluster_id', $outlet->cluster_id)->where('role_id', 3)->first()->nama_lengkap ?? 'ANEH',
-            date('d M Y',$outlet->created_at/1000),
+            User::where('divisi_id', $outlet->divisi_id)->where('region_id', $outlet->region_id)->where('cluster_id', $outlet->cluster_id)->where('role_id', 3)->first()->nama_lengkap ?? 'VACANT',
+            date('d M Y', $outlet->created_at / 1000),
         ];
     }
 }

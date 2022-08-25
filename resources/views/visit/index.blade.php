@@ -37,6 +37,9 @@
                                         <th>Tanggal</th>
                                         <th>Nama</th>
                                         <th>Outlet</th>
+                                        <th>Divisi</th>
+                                        <th>Region</th>
+                                        <th>Cluster</th>
                                         <th>Tipe</th>
                                         <th>Lokasi CI</th>
                                         <th>Lokasi CO</th>
@@ -54,8 +57,11 @@
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ date('d M Y', $visit->tanggal_visit / 1000) }}</td>
-                                            <td>{{ $visit->user->nama_lengkap }}</td>
+                                            <td>{{ $visit->user->nama_lengkap ?? '-' }}</td>
                                             <td>{{ $visit->outlet->nama_outlet ?? '-' }}</td>
+                                            <td>{{ $visit->outlet->divisi->name ?? '-' }}</td>
+                                            <td>{{ $visit->outlet->region->name ?? '-' }}</td>
+                                            <td>{{ $visit->outlet->cluster->name ?? '-' }}</td>
                                             <td>{{ $visit->tipe_visit }}</td>
                                             <td><a target="_blank"
                                                     href="http://www.google.com/maps/place/{{ $visit->latlong_in }}">Lihat
@@ -95,6 +101,9 @@
                     <!-- /.card -->
                 </div>
             </div>
+<div class="d-flex justify-content-center">
+    {{ $visits->links() }}
+</div>
             </div><!-- /.container-fluid -->
         </section>
     </section>

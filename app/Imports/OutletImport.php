@@ -21,19 +21,20 @@ class OutletImport implements ToModel,WithHeadingRow
 
     public function model(array $row)
     {
-        $outlet = new Outlet();
-        $outlet = $outlet->where('kode_outlet', $row['kode_outlet']);
+	$badanusaha_id = BadanUsaha::where('name', preg_replace('/\s+/', '', $row['badan_usaha']))->first()->id;
+        $divisi_id = Division::where('name', preg_replace('/\s+/', '', $row['divisi']))->where('badanusaha_id', $badanusaha_id)->first()->id;
+        $region_id = Region::where('name', preg_replace('/\s+/', '', $row['region']))->where('divisi_id', $divisi_id)->where('badanusaha_id', $badanusaha_id)->first()->id;
+        $cluster_id = Cluster::where('name', preg_replace('/\s+/', '', $row['cluster']))->first()->id;
+	    $outlet = new Outlet();
+        $outlet = $outlet->where('kode_outlet', preg_replace('/\s+/', '', strtoupper($row['kode_outlet'])))->where('divisi_id',$divisi_id);
         if ($outlet->first())
         {
-            $badanusaha_id = BadanUsaha::where('name', preg_replace('/\s+/', '', $row['badan_usaha']))->first()->id;
-            $divisi_id = Division::where('name', preg_replace('/\s+/', '', $row['divisi']))->where('badanusaha_id', $badanusaha_id)->first()->id;
-            $region_id = Region::where('name', preg_replace('/\s+/', '', $row['region']))->where('divisi_id', $divisi_id)->where('badanusaha_id', $badanusaha_id)->first()->id;
             $outlet->update([
                 'badanusaha_id' => $badanusaha_id,
                 'divisi_id' => $divisi_id,
                 'region_id' => $region_id,
-                'cluster_id' => Cluster::where('name', preg_replace('/\s+/', '', $row['cluster']))->first()->id,
-                'kode_outlet' => strtoupper($row['kode_outlet']),
+                'cluster_id' =>$cluster_id,
+                'kode_outlet' => preg_replace('/\s+/', '', strtoupper($row['kode_outlet'])),
                 'nama_outlet' => strtoupper($row['nama_outlet']),
                 'alamat_outlet' => strtoupper($row['alamat_outlet']),
                 'distric' => strtoupper($row['distric']),
@@ -52,7 +53,7 @@ class OutletImport implements ToModel,WithHeadingRow
                 'badanusaha_id' => $badanusaha_id,
                 'divisi_id' => $divisi_id,
                 'region_id' => $region_id,
-                'cluster_id' => Cluster::where('name', preg_replace('/\s+/', '', $row['cluster']))->first()->id,
+                'cluster_id' => $cluster_id,
                 'kode_outlet' => strtoupper($row['kode_outlet']),
                 'nama_outlet' => strtoupper($row['nama_outlet']),
                 'alamat_outlet' => strtoupper($row['alamat_outlet']),
@@ -63,6 +64,5 @@ class OutletImport implements ToModel,WithHeadingRow
                 'latlong' => $row['latlong'],
             ]);
         }
-        
     }
 }

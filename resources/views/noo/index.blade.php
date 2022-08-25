@@ -54,17 +54,15 @@
                                         <th>Nama Pemilik</th>
                                         <th>KTP/NPWP</th>
                                         <th>Nomer</th>
-                                        <th>Nomer Wakil</th>
+                                        <th>Email</th>
                                         <th>Distric</th>
                                         <th>Region</th>
                                         <th>Cluster</th>
                                         <th>Foto KTP/NPWP</th>
                                         <th>Foto Shop Sign</th>
-                                        <th>Foto Etalase</th>
                                         <th>Foto Depan</th>
                                         <th>Foto Kanan</th>
                                         <th>Foto Kiri</th>
-                                        <th>Foto Belakang</th>
                                         <th>Video</th>
                                         <th>Oppo</th>
                                         <th>Vivo</th>
@@ -108,17 +106,11 @@
                                             <td><a href="{{ asset('storage/') . '/' . $noo->poto_shop_sign }}">Lihat
                                                     Foto</a>
                                             </td>
-                                            <td><a href="{{ asset('storage/') . '/' . $noo->poto_etalase }}">Lihat
-                                                    Foto</a>
-                                            </td>
                                             <td><a href="{{ asset('storage/') . '/' . $noo->poto_depan }}">Lihat Foto</a>
                                             </td>
                                             <td><a href="{{ asset('storage/') . '/' . $noo->poto_kanan }}">Lihat Foto</a>
                                             </td>
                                             <td><a href="{{ asset('storage/') . '/' . $noo->poto_kiri }}">Lihat Foto</a>
-                                            </td>
-                                            <td><a href="{{ asset('storage/') . '/' . $noo->poto_belakang }}">Lihat
-                                                    Foto</a>
                                             </td>
                                             <td><a href="{{ asset('storage/') . '/' . $noo->video }}">Lihat Video</a>
                                             </td>
@@ -159,6 +151,9 @@
                     <!-- /.card -->
                 </div>
             </div>
+<div class="d-flex justify-content-center">
+    {{ $noos->links() }}
+</div>
             </div><!-- /.container-fluid -->
         </section>
     </section>

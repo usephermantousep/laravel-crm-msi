@@ -24,12 +24,14 @@ class NooExport implements FromCollection,WithHeadings,WithMapping
             'dibuat oleh',
             'kode outlet',
             'badan usaha',
+            'divisi',
             'nama outlet',
             'nama pemilik',
             'nomer KTP/NPWP',
             'alamat',
             'kota',
             'nomer outlet',
+            'email',
             'region',
             'cluster',
             'limit',
@@ -42,21 +44,23 @@ class NooExport implements FromCollection,WithHeadings,WithMapping
         ];
     }
 
-    public function map($noo) : array 
+    public function map($noo) : array
     {
         return [
             date('d M Y',$noo->created_at/1000),
-            $noo->created_by,
+            $noo->created_by ?? '-',
             $noo->kode_outlet ?? '-',
             $noo->badanusaha->name,
+            $noo->divisi->name,
             $noo->nama_outlet,
             $noo->nama_pemilik_outlet,
             $noo->ktp_outlet,
             $noo->alamat_outlet,
-            $noo->kota,
+            $noo->distric,
             $noo->nomer_tlp_outlet,
-            $noo->region->name,
-            $noo->cluster->name,
+            $noo->nomer_wakil_outlet,
+            $noo->region->name ?? '-',
+            $noo->cluster->name ?? '-',
             'Rp '.number_format($noo->limit,0,',','.'),
             $noo->status,
             $noo->approved_at == null ? '-' : date('d M Y',$noo->created_at/1000),

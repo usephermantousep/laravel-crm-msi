@@ -16,7 +16,7 @@ class VisitController extends Controller
      */
     public function index()
     {
-        $visits = Visit::with(['user','outlet'])->latest()->paginate(10);
+        $visits = Visit::with(['user','outlet.divisi','outlet.cluster','outlet.region'])->latest()->simplePaginate(100);
         return view('visit.index',[
             'visits' => $visits,
             'title' => 'Visit',

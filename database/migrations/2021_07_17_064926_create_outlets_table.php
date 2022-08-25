@@ -15,7 +15,7 @@ class CreateOutletsTable extends Migration
     {
         Schema::create('outlets', function (Blueprint $table) {
             $table->id();
-            $table->string('kode_outlet')->unique();            
+            $table->string('kode_outlet');
             $table->string('nama_outlet');
             $table->text('alamat_outlet');
             $table->string('nama_pemilik_outlet')->nullable();
@@ -26,11 +26,9 @@ class CreateOutletsTable extends Migration
             $table->foreignId('cluster_id');
             $table->string('distric');
             $table->string('poto_shop_sign')->nullable();
-            $table->string('poto_etalase')->nullable();
             $table->string('poto_depan')->nullable();
             $table->string('poto_kiri')->nullable();
             $table->string('poto_kanan')->nullable();
-            $table->string('poto_belakang')->nullable();
             $table->string('poto_ktp')->nullable();
             $table->string('video')->nullable();
             $table->integer('limit')->nullable();

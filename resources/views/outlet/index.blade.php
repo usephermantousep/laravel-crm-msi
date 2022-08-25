@@ -76,20 +76,18 @@
                                         <th>DSF</th>
                                         <th>Foto KTP</th>
                                         <th>Foto Shop Sign</th>
-                                        <th>Foto Etalase</th>
                                         <th>Foto Depan</th>
                                         <th>Foto Kiri</th>
                                         <th>Foto Kanan</th>
-                                        <th>Foto Belakang</th>
                                         <th>Video</th>
                                         <th>Tanggal Registrasi</th>
                                         <th>Edit</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($outlets as $outlet)
+                                    @foreach ($outlets as $index => $outlet)
                                         <tr>
-                                            <td>{{ $loop->iteration }}</td>
+                                            <td>{{ $index+1+($outlets->perPage()*($outlets->currentPage()-1)) }}</td>
                                             <td>{{ $outlet->kode_outlet }}</td>
                                             <td>{{ $outlet->badanusaha->name }}</td>
                                             <td>{{ $outlet->divisi->name }}</td>
@@ -137,12 +135,6 @@
                                             @else
                                                 <td>-</td>
                                             @endif
-                                            @if ($outlet->poto_etalase)
-                                                <td><a href="{{ asset('storage/') . '/' . $outlet->poto_etalase }}">Lihat
-                                                        Foto</a></td>
-                                            @else
-                                                <td>-</td>
-                                            @endif
                                             @if ($outlet->poto_depan)
                                                 <td><a href="{{ asset('storage/') . '/' . $outlet->poto_depan }}">Lihat
                                                         Foto</a></td>
@@ -157,12 +149,6 @@
                                             @endif
                                             @if ($outlet->poto_kanan)
                                                 <td><a href="{{ asset('storage/') . '/' . $outlet->poto_kanan }}">Lihat
-                                                        Foto</a></td>
-                                            @else
-                                                <td>-</td>
-                                            @endif
-                                            @if ($outlet->poto_belakang)
-                                                <td><a href="{{ asset('storage/') . '/' . $outlet->poto_belakang }}">Lihat
                                                         Foto</a></td>
                                             @else
                                                 <td>-</td>
@@ -188,7 +174,10 @@
                     <!-- /.card -->
                 </div>
             </div>
-            </div><!-- /.container-fluid -->
+<div class="d-flex justify-content-center">
+    {{ $outlets->links() }}
+</div>
+            </div>
         </section>
     </section>
     <!-- /.content -->

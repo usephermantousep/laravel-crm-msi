@@ -359,7 +359,7 @@ class SettingController extends Controller
 
     public function download(Request $request)
     {
-        return response()->download(public_path('/storage/apk/grosir.apk'),'grosirapp.apk',[
+        return response()->download(public_path('/storage/apk/SAM.apk'),'SAM.apk',[
             'Content-Type'=>'application/vnd.android.package-archive',
     'Content-Disposition'=> 'attachment; filename="android.apk"',
         ]);

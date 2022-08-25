@@ -54,12 +54,12 @@ class NooController extends Controller
                         ->where('divisi_id', $divisiId)
                         ->where('region_id', $regionId)
                         ->where('cluster_id', $clusterId)
-                        ->latest()
+                        ->orderBy('updated_at','DESC')
                         ->get();
                     break;
 
                 default:
-                    $noos = Noo::with(['badanusaha', 'cluster', 'region', 'divisi'])->latest()->get();
+                    $noos = Noo::with(['badanusaha', 'cluster', 'region', 'divisi'])->where('badanusaha_id',2)->whereIn('status',['PENDING','CONFIRMED','REJECTED'])->latest()->get();
                     break;
             }
 
@@ -142,18 +142,14 @@ class NooController extends Controller
                     break;
             }
 
-            for ($i = 0; $i <= 6; $i++) {
+            for ($i = 0; $i <= 4; $i++) {
                 $namaFoto = $request->file('photo' . $i)->getClientOriginalName();
                 if (Str::contains($namaFoto, 'fotodepan')) {
                     $data['poto_depan'] = $namaFoto;
-                } else if (Str::contains($namaFoto, 'fotobelakang')) {
-                    $data['poto_belakang'] = $namaFoto;
                 } else if (Str::contains($namaFoto, 'fotokanan')) {
                     $data['poto_kanan'] = $namaFoto;
                 } else if (Str::contains($namaFoto, 'fotokiri')) {
                     $data['poto_kiri'] = $namaFoto;
-                } else if (Str::contains($namaFoto, 'fotoetalase')) {
-                    $data['poto_etalase'] = $namaFoto;
                 } else if (Str::contains($namaFoto, 'fotoktp')) {
                     $data['poto_ktp'] = $namaFoto;
                 } else {
@@ -269,11 +265,9 @@ class NooController extends Controller
                 'region_id' => $noo->region_id,
                 'cluster_id' => $noo->cluster_id,
                 'poto_shop_sign' => $noo->poto_shop_sign,
-                'poto_etalase' => $noo->poto_etalase,
                 'poto_depan' => $noo->poto_depan,
                 'poto_kanan' => $noo->poto_kanan,
                 'poto_kiri' => $noo->poto_kiri,
-                'poto_belakang' => $noo->poto_belakang,
                 'poto_ktp' => $noo->poto_ktp,
                 'video' => $noo->video,
                 'radius' => 0,

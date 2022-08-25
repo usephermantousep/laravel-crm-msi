@@ -79,7 +79,7 @@
                                             @foreach ($regions as $region)
                                                 <option value="{{ $region->id }}"
                                                     {{ $region->id === $outlet->region_id ? 'selected' : '' }}>
-                                                    {{ $region->name }}</option>
+                                                    {{ $region->name.' - '.$region->divisi->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>

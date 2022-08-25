@@ -33,6 +33,12 @@ class UserController extends Controller
      * @throws \Exception
      */
         try {
+            if($request->version != '1.0.3')
+            {
+                return ResponseFormatter::error([
+                    'message' => 'Unauthorized'
+                ],'Gagal login, Update versi aplikasi SAM anda ke V1.0.3.', 500);
+            }
             $request->validate([
                 'username' => 'required',
                 'password' => 'required',

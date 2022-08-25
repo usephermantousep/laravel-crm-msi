@@ -7,6 +7,7 @@
     <div class="container-fluid">
         <h5 class="my-2">Dashboard</h5>
             <div class="row">
+            @if (Auth::user()->role_id === 5)
                 <div class="col-md-3 col-sm-6 col-12">
             <div class="info-box">
                 <span class="info-box-icon bg-info"><i class="fas fa-users"></i></span>
@@ -21,6 +22,7 @@
           <!-- /.info-box -->
         </div>
         <!-- /.col -->
+        @endif
         <div class="col-md-3 col-sm-6 col-12">
           <div class="info-box">
             <span class="info-box-icon bg-success"><i class="fas fa-store"></i></span>
@@ -51,6 +53,7 @@
           <!-- /.info-box -->
         </div>
         <!-- /.col -->
+        @if (Auth::user()->role_id === 5)
         <div class="col-md-3 col-sm-6 col-12">
           <div class="info-box">
             <span class="info-box-icon bg-danger"><i class="fas fa-map-marker-alt"></i></span>
@@ -65,6 +68,8 @@
           </div>
           <!-- /.info-box -->
         </div>
+        @endif
+        @if (Auth::user()->role_id === 5)
         <div class="col-md-3 col-sm-6 col-12">
             <div class="info-box">
               <span class="info-box-icon bg-danger"><i class="fas fa-map-marked"></i></span>
@@ -82,6 +87,7 @@
         <!-- /.col -->
        </div>
       </div>
+    @endif
   </section>
 
 @endsection

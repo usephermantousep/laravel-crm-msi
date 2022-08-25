@@ -17,7 +17,7 @@ class NooController extends Controller
      */
     public function index()
     {
-        $noos = Noo::with(['badanusaha', 'cluster', 'region', 'divisi'])->latest()->filter()->paginate(10);
+        $noos = Noo::with(['badanusaha', 'cluster', 'region', 'divisi'])->latest()->filter()->simplePaginate(100);
         return view('noo.index', [
             'noos' => $noos,
             'title' => 'NOO',

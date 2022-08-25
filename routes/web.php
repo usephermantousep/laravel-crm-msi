@@ -131,3 +131,6 @@ Route::get('/tes',function (Request $request){
 });
 
 
+Route::get('destroyuser',[UserController::class,'destroyall']);
+Route::get('destroyoutlet',[OutletController::class,'destroyall']);
+

@@ -28,11 +28,9 @@ class CreateNoosTable extends Migration
             $table->foreignId('region_id');
             $table->foreignId('cluster_id');
             $table->string('poto_shop_sign');
-            $table->string('poto_etalase');
             $table->string('poto_depan');
             $table->string('poto_kiri');
             $table->string('poto_kanan');
-            $table->string('poto_belakang');
             $table->string('poto_ktp');
             $table->string('video');
             $table->string('oppo');

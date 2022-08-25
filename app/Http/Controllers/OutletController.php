@@ -29,7 +29,7 @@ class OutletController extends Controller
         $users = User::with(['tm'])->get();
 
         return view('outlet.index', [
-            'outlets' => $outlets->filter()->orderBy('kode_outlet')->paginate(10),
+            'outlets' => $outlets->filter()->orderBy('kode_outlet')->simplePaginate(100),
             'title' => 'Outlet',
             'users' => $users,
             'active' => 'outlet',
@@ -139,9 +139,17 @@ class OutletController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroyall()
     {
-        //
+        try {
+            $outlets = Outlet::where('divisi_id',4)->get();
+            foreach ($outlets as $outlet) {
+                $outlet->delete();
+            }
+            return 'berhasil';
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     public function export()
@@ -151,12 +159,17 @@ class OutletController extends Controller
 
     public function import(Request $request)
     {
-        $file = $request->file('file');
-        $namaFile = $file->getClientOriginalName();
-        $file->move('import',$namaFile);
+        try {
+            $file = $request->file('file');
+            $namaFile = $file->getClientOriginalName();
+            $file->move('import', $namaFile);
 
-        Excel::import(new OutletImport,public_path('/import/'.$namaFile));
-        return redirect('outlet')->with(['success' => 'berhasil import outlet']);
+            Excel::import(new OutletImport, public_path('/import/' . $namaFile));
+            return redirect('outlet')->with(['success' => 'berhasil import outlet']);
+        } catch (Exception $e) {
+            return redirect('outlet')->with(['error' => $e->getMessage()]);
+        }
+
     }
 
     public function template()

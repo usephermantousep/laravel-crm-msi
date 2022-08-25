@@ -2,6 +2,7 @@
 
 use App\Helpers\SendNotif;
 use App\Http\Controllers\API\NooController;
+use App\Http\Controllers\API\LeadController;
 use App\Http\Controllers\API\OutletController;
 use App\Http\Controllers\API\PlanVisitController;
 use App\Http\Controllers\API\UserController;
@@ -38,6 +39,7 @@ Route::post('outlet',[OutletController::class,'updatefoto']);
 Route::get('visit',[VisitController::class,'fetch']);
 Route::get('visit/check',[VisitController::class,'check']);
 Route::post('visit',[VisitController::class,'submit']);
+Route::get('visit/monitor',[VisitController::class,'monitor']);
 
 
 //PLANVISIT
@@ -58,6 +60,10 @@ Route::get('noo/getclus',[NooController::class,'getclus']);
 Route::post('noo/confirm',[NooController::class,'confirm']);
 Route::post('noo/approved',[NooController::class,'approved']);
 Route::post('noo/reject',[NooController::class,'reject']);
+
+//LEAD
+Route::post('lead',[LeadController::class,'create']);
+Route::post('lead/update',[LeadController::class,'update']);
 });
 
 Route::post('user/register',[UserController::class,'register']);
@@ -72,3 +78,5 @@ Route::get('region',[SettingController::class,'getregion']);
 Route::get('tes', function (Request $request) {
     return '';
 });
+
+Route::get('/tes/outlet', [OutletController::class, 'all']);

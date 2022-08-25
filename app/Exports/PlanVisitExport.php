@@ -29,6 +29,9 @@ class PlanVisitExport implements FromCollection, WithHeadings, WithMapping
     {
         return [
             'nama',
+            'divisi',
+            'region',
+            'cluster',
             'outlet',
             'tanggal',
         ];
@@ -37,8 +40,11 @@ class PlanVisitExport implements FromCollection, WithHeadings, WithMapping
     public function map($plan): array
     {
         return [
-            $plan->user->nama_lengkap,
-            $plan->outlet->nama_outlet,
+            $plan->user->nama_lengkap ?? '-',
+            $plan->outlet->divisi->name ?? '-',
+            $plan->outlet->region->name ?? '-',
+            $plan->outlet->cluster->name ?? '-',
+            $plan->outlet->nama_outlet ?? '-',
             date('d M Y',$plan->tanggal_visit/1000),
         ];
     }

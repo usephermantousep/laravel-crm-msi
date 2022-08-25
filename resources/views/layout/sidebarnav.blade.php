@@ -2,9 +2,9 @@
  <aside class="main-sidebar main-sidebar-custom sidebar-dark-primary elevation-4">
      <!-- Brand Logo -->
      <a href="#" class="brand-link">
-         <img src="https://msis.co.id/wp-content/uploads/2021/08/Logo-MSI-Media-Selular-Indonesia-1024x570.png"
-             alt="AdminLTE Logo" class="brand-image" style="opacity: .8">
-         <span class="brand-text font-weight-light"><strong>Grosir APP</strong></span>
+         <img src="{{ asset('icon') }}/samsam.png"
+             alt="Logo" class="brand-image" style="opacity: .8">
+         <span class="brand-text font-weight-light"><strong>DASHBOARD</strong></span>
      </a>
 
      <!-- Sidebar -->
@@ -20,36 +20,47 @@
              <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                  <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
+                @if (Auth::user()->role_id === 5)
                  <li class="nav-item">
                      <a href="/user" class="nav-link {{ $active === 'user' ? 'active' : '' }}">
                          <i class="nav-icon fas fa-users"></i>
                          <p>User</p>
                      </a>
                  </li>
+                @endif
+                @if (Auth::user()->role_id === 5 || Auth::user()->role_id === 4)
                  <li class="nav-item">
                      <a href="/outlet" class="nav-link {{ $active === 'outlet' ? 'active' : '' }}">
                          <i class="nav-icon fas fa-store"></i>
                          <p>Outlet</p>
                      </a>
                  </li>
+                @endif
+                @if (Auth::user()->role_id === 5 || Auth::user()->role_id === 4)
                  <li class="nav-item">
                      <a href="/noo" class="nav-link {{ $active === 'noo' ? 'active' : '' }}">
                          <i class="nav-icon fas fa-store-alt"></i>
                          <p>NOO</p>
                      </a>
                  </li>
+                @endif
+                @if (Auth::user()->role_id === 5)
                  <li class="nav-item">
                      <a href="/visit" class="nav-link {{ $active === 'visit' ? 'active' : '' }}">
                          <i class="nav-icon fas fa-map-marker-alt"></i>
                          <p>Visit</p>
                      </a>
                  </li>
+                @endif
+                @if (Auth::user()->role_id === 5)
                  <li class="nav-item">
                      <a href="/planvisit" class="nav-link {{ $active === 'planvisit' ? 'active' : '' }}">
                          <i class="nav-icon fas fa-map-marked"></i>
                          <p>Plan Visit</p>
                      </a>
                  </li>
+                @endif
+                @if (Auth::user()->role_id === 5)
                  <li class="nav-item">
                      <a href="#" class="nav-link {{ $active === 'setting' ? 'active' : '' }}">
                          <i class="nav-icon fas fa-cogs"></i>
@@ -91,6 +102,7 @@
                          </li>
                      </ul>
                  </li>
+                @endif
              </ul>
          </nav>
          <!-- /.sidebar-menu -->

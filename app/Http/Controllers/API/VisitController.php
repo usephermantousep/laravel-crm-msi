@@ -14,6 +14,60 @@ use Illuminate\Support\Facades\Auth;
 
 class VisitController extends Controller
 {
+
+    public function monitor(Request $request)
+    {
+        try {
+
+            $user = Auth::user();
+
+            if($user->role_id == 1)
+            {
+                $visit = Visit::with([
+                'outlet.badanusaha',
+                'outlet.region',
+                'outlet.divisi',
+                'outlet.cluster',
+                'user.badanusaha',
+                'user.region',
+                'user.divisi',
+                'user.cluster',
+                'user.role',
+                ])->whereHas('user', function ($query) {
+                   $query->where('tm_id',Auth::user()->id);
+                })
+                ->whereDate('tanggal_visit', $request->date ? date('Y-m-d', strtotime($request->date))  : date('Y-m-d'))
+                ->latest()
+                ->get();
+            }
+            else
+            {
+            $visit = Visit::with([
+                'outlet.badanusaha',
+                'outlet.region',
+                'outlet.divisi',
+                'outlet.cluster',
+                'user.badanusaha',
+                'user.region',
+                'user.divisi',
+                'user.cluster',
+                'user.role',
+                ])->whereHas('user', function ($query) {
+                   $query->where('region_id',Auth::user()->region_id);
+                })
+                ->whereDate('tanggal_visit', $request->date ? date('Y-m-d', strtotime($request->date))  : date('Y-m-d'))
+                ->latest()
+                ->get();
+             }
+
+            return ResponseFormatter::success($visit, 'fetch monitoring visit succes');
+        } catch (Exception $err) {
+            return ResponseFormatter::error([
+                'message' => $err->getMessage(),
+            ], $err->getMessage(), 500);
+        }
+    }
+
     public function fetch(Request $request)
     {
         try {
@@ -30,7 +84,7 @@ class VisitController extends Controller
                 'user.role'
             ])
                 ->where('user_id', Auth::user()->id)
-                ->whereDate('tanggal_visit', today())
+                ->whereDate('tanggal_visit', date('Y-m-d'))
                 ->latest()
                 ->get();
 
@@ -41,7 +95,6 @@ class VisitController extends Controller
             ], $err, 500);
         }
     }
-
     public function check(Request $request)
     {
         $request->validate([
@@ -49,11 +102,11 @@ class VisitController extends Controller
         ]);
 
         ##cek database terkahir dari tanggal sekarang dan user tersebut
-        $lastDataVisit = Visit::whereDate('tanggal_visit', today())->where('user_id', Auth::user()->id)->latest()->first();
+        $lastDataVisit = Visit::whereDate('tanggal_visit', date('Y-m-d'))->where('user_id', Auth::user()->id)->latest()->first();
         ##cek data terkahir durasi
 
         ##cek table dengan outlet yang dikirim dan tanggal hari ini
-        // $lastDataSelectedOutletVisit = Visit::with(['outlet.cluster','outlet.user.cluster'])->whereDate('tanggal_visit',today())->where('user_id',Auth::user()->id)->where('outlet_id',$outletId)->first();
+        // $lastDataSelectedOutletVisit = Visit::with(['outlet.cluster','outlet.user.cluster'])->whereDate('tanggal_visit',date('Y-m-d'))->where('user_id',Auth::user()->id)->where('outlet_id',$outletId)->first();
 
         ##kalo mode ci
         if ($request->check_in) {
@@ -156,7 +209,7 @@ class VisitController extends Controller
                 $request->picture_visit->move(storage_path('app/public/'), $imageName);
                 ##simpan ke database
                 $visit = Visit::create([
-                    'tanggal_visit' => today(),
+                    'tanggal_visit' => date('Y-m-d'),
                     'user_id' => Auth::user()->id,
                     'outlet_id' => $outletId,
                     'tipe_visit' => $request->tipe_visit,
@@ -171,7 +224,7 @@ class VisitController extends Controller
             }
 
             if ($checkOut) {
-                $lastDataVisit = Visit::whereDate('tanggal_visit', today())->where('user_id', Auth::user()->id)->latest()->first();
+                $lastDataVisit = Visit::whereDate('tanggal_visit', date('Y-m-d'))->where('user_id', Auth::user()->id)->latest()->first();
                 if ($lastDataVisit != null) {
                     #validasi data
                     $request->validate([
@@ -194,11 +247,12 @@ class VisitController extends Controller
                     $durasi = $awal->diffInMinutes($akhir);
 
                     ##buat nama gambar
-                    $imageName = date('Y-m-d') . '-' . Auth::user()->username . '-' . 'IN-' . Carbon::parse(time())->getPreciseTimestamp(3)  . '.' . $request->picture_visit->extension();
+                    $imageName = date('Y-m-d') . '-' . Auth::user()->username . '-' . 'OUT-' . Carbon::parse(time())->getPreciseTimestamp(3)  . '.' . $request->picture_visit->extension();
 
                     ##simpan gambar di folder public/images
                     $request->picture_visit->move(storage_path('app/public/'), $imageName);
                     $data = [
+			'tanggal_visit' => date('Y-m-d'),
                         'latlong_out' => $request->latlong_out,
                         'check_out_time' => now(),
                         'laporan_visit' => $request->laporan_visit,
